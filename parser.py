@@ -19,6 +19,23 @@ class Parser:
             db: DatabaseHelper instance for vocabulary lookups
         """
         self.db = db
+        
+        # Common words to ignore when identifying unknowns
+        # These are auxiliary verbs, articles, pronouns, and prepositions
+        self.stop_words = {
+            'a', 'an', 'the',           # Articles
+            'is', 'are', 'am', 'was', 'were', 'be', 'been', 'being',  # Be verbs
+            'can', 'could', 'will', 'would', 'shall', 'should', 'may', 'might', 'must',  # Modals
+            'do', 'does', 'did', 'doing', 'done',  # Do verbs
+            'have', 'has', 'had', 'having',  # Have verbs
+            'i', 'you', 'he', 'she', 'it', 'we', 'they',  # Pronouns
+            'me', 'him', 'her', 'us', 'them',  # Object pronouns
+            'my', 'your', 'his', 'her', 'its', 'our', 'their',  # Possessive
+            'this', 'that', 'these', 'those',  # Demonstrative
+            'in', 'on', 'at', 'to', 'from', 'with', 'by', 'of', 'for', 'about',  # Prepositions
+            'and', 'or', 'but', 'so', 'yet',  # Conjunctions
+            'not', 'no', 'yes',  # Negation/affirmation
+        }
     
     def tokenize(self, text: str) -> List[str]:
         """
@@ -57,6 +74,10 @@ class Parser:
         unknown = []
         
         for token in tokens:
+            # Skip stop words (common words we don't need to learn)
+            if token in self.stop_words:
+                continue
+                
             if not self.db.word_exists(token):
                 # Only add each unknown word once
                 if token not in unknown:

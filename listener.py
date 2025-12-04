@@ -91,7 +91,7 @@ class Listener:
         if parse_result['has_unknowns']:
             # Skip common stop words and ask about more meaningful words first
             stop_words = {'the', 'a', 'an', 'is', 'are', 'was', 'were', 'in', 'on', 'at', 
-                         'to', 'for', 'of', 'and', 'or', 'but', 'not'}
+                         'to', 'for', 'of', 'and', 'or', 'but', 'not', 'am', 'be', 'it'}
             
             # Find first non-stop-word unknown
             unknown_word = None
@@ -124,6 +124,10 @@ class Listener:
         else:
             # All words are known, update relations
             self._update_relations(parse_result['tokens'])
+            
+            # Try to extract semantic patterns
+            self._extract_semantic_patterns(parse_result['tokens'])
+            
             response['message'] = "I understood that!"
             response['type'] = 'understood'
         
@@ -178,6 +182,58 @@ class Listener:
             'message': confirmation,
             'learned': True
         }
+    
+    def _extract_semantic_patterns(self, tokens: List[str]) -> None:
+        """
+        Extract semantic patterns from tokens and create appropriate relations.
+        
+        Recognizes patterns like:
+        - "X can Y" -> X capable_of Y
+        - "X is a Y" -> X is_a Y
+        - "X is Y" -> X is_a Y
+        
+        Args:
+            tokens: List of tokens from a sentence
+        """
+        # Pattern 1: "X can Y" (e.g., "dog can bark")
+        # Pattern 2: "a X can Y" (e.g., "a dog can bark")
+        for i in range(len(tokens)):
+            if tokens[i] == 'can' and i > 0 and i < len(tokens) - 1:
+                # Find subject (skip articles)
+                subject_idx = i - 1
+                while subject_idx >= 0 and tokens[subject_idx] in ['a', 'an', 'the']:
+                    subject_idx -= 1
+                
+                if subject_idx >= 0:
+                    subject = tokens[subject_idx]
+                    action = tokens[i + 1]
+                    
+                    # Create capable_of relation
+                    if self.db.word_exists(subject) and self.db.word_exists(action):
+                        self.db.add_relation(subject, "capable_of", action)
+        
+        # Pattern 2: "X is a Y" or "X is an Y" (e.g., "dog is an animal")
+        for i in range(len(tokens)):
+            if tokens[i] == 'is' and i > 0 and i < len(tokens) - 1:
+                # Find subject (skip articles before "is")
+                subject_idx = i - 1
+                while subject_idx >= 0 and tokens[subject_idx] in ['a', 'an', 'the']:
+                    subject_idx -= 1
+                
+                if subject_idx >= 0:
+                    subject = tokens[subject_idx]
+                    
+                    # Find object after "is" (skip articles)
+                    object_idx = i + 1
+                    while object_idx < len(tokens) and tokens[object_idx] in ['a', 'an', 'the']:
+                        object_idx += 1
+                    
+                    if object_idx < len(tokens):
+                        obj = tokens[object_idx]
+                        
+                        # Create is_a relation
+                        if self.db.word_exists(subject) and self.db.word_exists(obj):
+                            self.db.add_relation(subject, "is_a", obj)
     
     def _update_relations(self, tokens: List[str]) -> None:
         """
