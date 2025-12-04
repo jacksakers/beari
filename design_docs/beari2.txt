@@ -1,0 +1,150 @@
+Beari 2: Design & Architecture
+
+1. High-Level Concept: Object-Oriented Learning (OOL)
+
+Beari 2 is an "Object-Oriented Learning" AI. It does not just predict the next word; it builds and continuously updates "Living Objects" in its database.
+
+The Goal: To have objects that grow, change, and add new properties on the fly as the program runs.
+
+The Method: Beari parses user input to extract subjects, predicates, and adjectives, then maps them as properties onto existing or new conceptual objects.
+
+2. The Database Strategy: The "Living Object" Store
+
+To support objects that can "grow" with arbitrary fields (like feels_like, can_be, preword), we need a flexible schema. We will use SQLite, but with a structure that mimics a document store (or Entity-Attribute-Value pattern) to allow dynamic property growth.
+
+Data Schema
+
+Table 1: ConceptObjects (The Items)
+
+id: Unique ID
+
+name: The word (e.g., "Day", "I", "Bad")
+
+type: Noun, Verb, Adjective
+
+Table 2: DynamicProperties (The Growth)
+
+parent_id: ID of the object getting the property (e.g., ID of "Day")
+
+relation: The key (e.g., "is", "can_have", "feels_like", "can_describe")
+
+target_value: The value or ID of the related object (e.g., "bad" or ID of "bad")
+
+Note: This allows us to add ANY new property to ANY object at runtime without changing the database code.
+
+3. The Core Learning Loop
+
+A. Input & Parsing
+
+The user types a sentence. Beari uses punctuation to determine sentence type and NLP (Natural Language Processing) logic to split components.
+
+Input: "I had a bad day today."
+
+Analysis:
+
+Subject: "I"
+
+Verb: "had"
+
+Object: "day"
+
+Adjective: "bad"
+
+B. Object-Oriented Update (The "Growth" Phase)
+
+Beari retrieves or creates objects for every component and cross-links them based on the sentence structure.
+
+1. The Subject ("I") Update:
+
+Check existing I object.
+
+Add/Update Property: {relation: "had", value: "Day"}
+
+Result: I now knows it "can have" a Day.
+
+2. The Object ("Day") Update:
+
+Check existing Day object.
+
+Add/Update Property: {relation: "is", value: "bad"}
+
+Add/Update Property: {relation: "preword", value: "a"}
+
+Result: Day now knows it "can be bad".
+
+3. The Adjective ("Bad") Update:
+
+Check existing Bad object.
+
+Add/Update Property: {relation: "can_describe", value: "Day"}
+
+C. Confirmation
+
+Beari echoes the logic back to the user to confirm the database transaction.
+
+Output: "I see, you had a bad day."
+
+4. Active Learning: The "Gap Analysis" Engine
+
+After the confirmation, Beari enters Inquiry Mode. It scans the objects involved in the previous sentence for "Sparse Fields"—common properties that are missing data.
+
+Standard Object Templates (The "Fields to Fill")
+
+Beari tries to fill these slots for every Noun:
+
+is: (State/Quality)
+
+feels_like: (Sensory/Emotional)
+
+can_do: (Action)
+
+can_have: (Possession)
+
+can_be: (Potential)
+
+The Workflow
+
+Scan: Beari looks at the Day object.
+
+Check: It sees Day has an is property ("bad"), but feels_like is empty.
+
+Generate Question: "What does it feel like to have a bad day?"
+
+User Answer: "It feels aggravating."
+
+Update: Beari updates the Day object: Day { is: bad, feels_like: aggravating }.
+
+5. Implementation Logic
+
+The LivingObject Class
+
+Each word is loaded into a Python class instance at runtime.
+
+class LivingObject:
+    def __init__(self, word, pos):
+        self.word = word
+        self.pos = pos
+        self.properties = {} # Dynamic dictionary
+
+    def add_property(self, relation, value):
+        if relation not in self.properties:
+            self.properties[relation] = []
+        self.properties[relation].append(value)
+        # Trigger DB update here
+
+
+Gap Detection Algorithm
+
+def find_learning_opportunity(object):
+    common_fields = ["is", "feels_like", "can_do", "can_have"]
+    for field in common_fields:
+        if field not in object.properties:
+            return field # Found a gap! Ask about this.
+    return None
+
+
+6. Future Roadmap
+
+Sentence Generator: Using the LivingObjects, construct sentences by traversing the graph. (e.g., Start at I -> follow had -> get Day -> follow is -> get Bad -> Output: "I had a bad day.")
+
+Context Clustering: If Day is often associated with "Sun" and "Light", infer that Day is related to "Time".

@@ -4,8 +4,17 @@ Provides core database operations for vocabulary and relations management.
 """
 
 import sqlite3
+import os
+import sys
 from typing import Optional, List, Dict, Tuple
-from .db_schema import SCHEMA_STATEMENTS
+
+# Handle imports for both direct execution and package import
+try:
+    from .db_schema import SCHEMA_STATEMENTS
+except ImportError:
+    # Add parent directory to path for direct execution
+    sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    from db.db_schema import SCHEMA_STATEMENTS
 
 
 class DatabaseHelper:

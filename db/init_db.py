@@ -3,7 +3,13 @@ Database Initialization Script for Beari AI
 Run this script to set up the database for the first time.
 """
 
-from db_helpers import DatabaseHelper
+import sys
+import os
+
+# Add parent directory to path for imports
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+from db.db_helpers import DatabaseHelper
 
 
 def main():
