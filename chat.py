@@ -14,7 +14,7 @@ def main():
         print("Please run 'python train.py' first to train the model.")
         return
 
-    print("\n--- AI Ready. Type 'quit' to exit. ---")
+    print("\n--- Beari is Ready. Type 'quit' to exit. ---")
     print("(Try typing words that are in the text file to see how it predicts the next words)")
 
     # The Chat Loop
@@ -30,9 +30,9 @@ def main():
         reply = reply.replace('newline', '\n')
         
         if reply:
-            print(f"AI: {reply}")
+            print(f"Beari: {reply}")
         else:
-            print("AI: I don't know that word, so I can't predict what comes next.")
+            print("Beari: I don't know that word, so I can't predict what comes next.")
 
 if __name__ == "__main__":
     main()

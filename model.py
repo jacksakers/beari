@@ -1,5 +1,3 @@
-import random
-
 class BarebonesAI:
     def __init__(self):
         # This dictionary is the "Model." 

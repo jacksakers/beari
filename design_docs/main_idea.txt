@@ -1,0 +1,117 @@
+Project Beari: Design & Architecture
+
+1. High-Level Concept
+
+Beari is a hybrid AI system that combines online learning with structured grammar generation. Unlike standard LLMs (which are "black boxes" of numbers), Beari relies on an explicit database of words, their definitions (Parts of Speech), and their relationships to other words.
+
+2. The Database Strategy
+
+You asked about efficiency. While "MDB" (often associated with Microsoft Access) or MongoDB are options, for a Python-based learning project, SQLite is the gold standard.
+
+Why? It is built into Python (no installation needed), it is incredibly fast, and it allows us to structure data strictly (Subjects vs. Predicates), which is essential for your grammar requirements.
+
+Data Schema (The "Brain" Structure)
+
+Table 1: Vocabulary
+
+id: Unique ID
+
+word: The string (e.g., "apple")
+
+pos_tag: Part of Speech (Noun, Verb, Adjective). Crucial for grammar.
+
+meaning_tag: Context category (e.g., "food", "technology", "emotion").
+
+Table 2: Relations (The "Context")
+
+word_a_id: Link to first word
+
+relation_type: (e.g., "is_a", "capable_of", "part_of")
+
+word_b_id: Link to second word
+
+Example: [Dog] --(capable_of)--> [Bark]
+
+3. The Three Modes of Operation
+
+A. The Listener (Continuous Learning)
+
+This runs every time the user types a sentence.
+
+Parse: Split sentence into words.
+
+Lookup: Check DB for each word.
+
+Gap Detection: If a word is missing, flag it.
+
+Association: If the input is "The dog ate the bone," and Beari knows "dog" and "bone," it creates a weight/connection between them in the context graph.
+
+B. The Querist (Question Mode)
+
+Triggered when Gap Detection finds an unknown word.
+
+Input: "The capybara sat."
+
+Unknown: "capybara"
+
+Logic: Beari checks its template for asking about nouns.
+
+Output: "I do not know 'capybara'. Is 'capybara' a person, place, or thing?"
+
+User Reply: "It is an animal."
+
+Action: Beari saves "capybara" as a Noun with context tag Animal.
+
+C. The Orator (Sentence Generator)
+
+To ensure Subject-Predicate-Punctuation, we cannot use random chains. We must use Templates.
+
+Template: [Subject (Noun)] + [Predicate (Verb)] + [Object (Noun)] + .
+
+Process:
+
+Pick a random Subject from the DB (e.g., "The Robot").
+
+Find a Verb related to that Subject (e.g., "calculates").
+
+Find an Object related to that Verb (e.g., "data").
+
+Result: "The Robot calculates data."
+
+4. Continuous Learning Workflow
+
+Training is not a separate phase; it is the act of updating the SQLite database state.
+
+User: "Python is a language."
+
+Beari:
+
+Exists("Python")? -> No -> Create Node.
+
+Exists("Language")? -> Yes.
+
+Identify Structure: "X is Y" implies specific definition.
+
+ACTION: Save "Python" as Noun. Save Relation: Python -> (is_a) -> Language.
+
+Beari (Internal State): "I have updated my graph. I can now use 'Python' in sentences regarding languages."
+
+5. Potential Challenges & Solutions
+
+Polysemy (Double meanings): "Bank" (river) vs "Bank" (money).
+
+Solution: Store "Context Tags" alongside words. If the conversation mentions "money," prioritize the financial definition.
+
+Grammar Agreement: "The dogs runs" (incorrect).
+
+Solution: Store plural/singular flags in the Vocabulary table.
+
+6. Implementation Roadmap
+
+Phase 1: Build the SQLite setup and the helper functions to add_word and get_word.
+
+Phase 2: Build the Parser that identifies unknown words.
+
+Phase 3: Build the Question Generator to ask about those unknown words.
+
+Phase 4: Build the Sentence Constructor using strict grammar templates.

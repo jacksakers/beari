@@ -1,4 +1,7 @@
 __pycache__/*
+db/__pycache__/*
 
 # Ignore trained model files
 trained_model.json
+
+*.db
