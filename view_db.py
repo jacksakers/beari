@@ -54,19 +54,17 @@ def view_relations(db):
     """Display all word relations."""
     print_section_header("RELATIONS")
     
-    # Get all words to check their relations
-    words = db.get_all_words()
+    # Query all relations directly from the database
+    query = """
+        SELECT va.word as word_a, r.relation_type, vb.word as word_b, r.weight
+        FROM relations r
+        JOIN vocabulary va ON r.word_a_id = va.id
+        JOIN vocabulary vb ON r.word_b_id = vb.id
+        ORDER BY r.relation_type, va.word
+    """
     
-    if not words:
-        print("\nNo relations (vocabulary is empty).")
-        return
-    
-    all_relations = []
-    
-    for word in words:
-        relations = db.get_relations(word['word'])
-        for rel in relations:
-            all_relations.append(rel)
+    db.cursor.execute(query)
+    all_relations = [dict(row) for row in db.cursor.fetchall()]
     
     if not all_relations:
         print("\nNo relations defined yet.")
@@ -117,7 +115,7 @@ def view_word_details(db, word):
     if relations:
         for rel in relations:
             weight_str = f" [weight: {rel['weight']}]" if rel['weight'] > 1 else ""
-            print(f"  • {rel['relation_type']}: {rel['word_b']}{weight_str}")
+            print(f"  • {rel['relation_type']}: {rel['target_word']}{weight_str}")
     else:
         print("  No outgoing relations")
     
@@ -129,7 +127,7 @@ def view_word_details(db, word):
     if reverse_relations:
         for rel in reverse_relations:
             weight_str = f" [weight: {rel['weight']}]" if rel['weight'] > 1 else ""
-            print(f"  • {rel['word_a']} → {rel['relation_type']}{weight_str}")
+            print(f"  • {rel['source_word']} → {rel['relation_type']}{weight_str}")
     else:
         print("  No incoming relations")
 
