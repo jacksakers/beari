@@ -1,0 +1,4 @@
+__pycache__/*
+
+# Ignore trained model files
+trained_model.json
