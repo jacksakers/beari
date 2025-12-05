@@ -116,6 +116,15 @@ class Beari2:
             source_obj = self.manager.create_or_get(relation['source'], 'Noun')
             source_obj.add_property(relation['relation'], relation['target'])
             self.manager.save_object(source_obj)
+            
+            # Update the object in updated_objects if it exists there
+            for i, obj in enumerate(updated_objects):
+                if obj.word == source_obj.word and obj.pos == source_obj.pos:
+                    updated_objects[i] = source_obj
+                    break
+            else:
+                # If not in list, add it
+                updated_objects.append(source_obj)
         
         # Save all updated objects
         for obj in updated_objects:

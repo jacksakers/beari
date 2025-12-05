@@ -1,1012 +1,1011 @@
-
-is	2699		(verb)
-are	1843		(verb)
-has	384		(verb)
-get	233		(verb)
-see	204		(verb)
-need	193		(verb)
-know	181		(verb)
-would	176		(verb)
-find	166		(verb)
-take	164		(verb)
-want	163		(verb)
-does	104		(verb)
-learn	102		(verb)
-become	97		(verb)
-come	88		(verb)
-include	80		(verb)
-thank	78		(verb)
-provide	68		(verb)
-create	63		(verb)
-add	60		(verb)
-understand	59		(verb)
-consider	57		(verb)
-choose	49		(verb)
-develop	49		(verb)
-remember	46		(verb)
-determine	40		(verb)
-grow	37		(verb)
-allow	35		(verb)
-supply	34		(verb)
-bring	31		(verb)
-improve	31		(verb)
-maintain	30		(verb)
-begin	29		(verb)
-exist	28		(verb)
-tend	28		(verb)
-enjoy	27		(verb)
-perform	27		(verb)
-decide	25		(verb)
-identify	25		(verb)
-continue	24		(verb)
-protect	24		(verb)
-require	24		(verb)
-occur	23		(verb)
-write	23		(verb)
-approach	22		(verb)
-avoid	22		(verb)
-prepare	22		(verb)
-build	21		(verb)
-achieve	20		(verb)
-believe	20		(verb)
-receive	20		(verb)
-seem	20		(verb)
-discuss	19		(verb)
-realize	19		(verb)
-contain	18		(verb)
-follow	18		(verb)
-refer	18		(verb)
-solve	18		(verb)
-describe	17		(verb)
-prefer	17		(verb)
-prevent	17		(verb)
-discover	16		(verb)
-ensure	16		(verb)
-expect	16		(verb)
-invest	16		(verb)
-reduce	16		(verb)
-speak	16		(verb)
-appear	15		(verb)
-explain	15		(verb)
-explore	15		(verb)
-involve	15		(verb)
-lose	15		(verb)
-afford	14		(verb)
-agree	14		(verb)
-hear	14		(verb)
-remain	14		(verb)
-represent	14		(verb)
-apply	13		(verb)
-forget	13		(verb)
-recommend	13		(verb)
-rely	13		(verb)
-vary	13		(verb)
-generate	12		(verb)
-obtain	12		(verb)
-accept	11		(verb)
-communicate	11		(verb)
-complain	11		(verb)
-depend	11		(verb)
-enter	11		(verb)
-happen	11		(verb)
-indicate	11		(verb)
-suggest	11		(verb)
-survive	11		(verb)
-appreciate	10		(verb)
-compare	10		(verb)
-imagine	10		(verb)
-manage	10		(verb)
-differ	9		(verb)
-encourage	9		(verb)
-expand	9		(verb)
-prove	9		(verb)
-react	9		(verb)
-recognize	9		(verb)
-relax	9		(verb)
-replace	9		(verb)
-borrow	8		(verb)
-earn	8		(verb)
-emphasize	8		(verb)
-enable	8		(verb)
-operate	8		(verb)
-reflect	8		(verb)
-send	8		(verb)
-anticipate	7		(verb)
-assume	7		(verb)
-engage	7		(verb)
-enhance	7		(verb)
-examine	7		(verb)
-install	7		(verb)
-participate	7		(verb)
-intend	6		(verb)
-introduce	6		(verb)
-relate	6		(verb)
-settle	6		(verb)
-assure	5		(verb)
-attract	5		(verb)
-distribute	5		(verb)
-overcome	5		(verb)
-owe	5		(verb)
-succeed	5		(verb)
-suffer	5		(verb)
-throw	5		(verb)
-acquire	4		(verb)
-adapt	4		(verb)
-adjust	4		(verb)
-argue	4		(verb)
-arise	4		(verb)
-confirm	4		(verb)
-encouraging	4		(verb)
-incorporate	4		(verb)
-justify	4		(verb)
-organize	4		(verb)
-ought	4		(verb)
-possess	4		(verb)
-relieve	4		(verb)
-retain	4		(verb)
-shut	4		(verb)
-calculate	3		(verb)
-compete	3		(verb)
-consult	3		(verb)
-deliver	3		(verb)
-extend	3		(verb)
-investigate	3		(verb)
-negotiate	3		(verb)
-qualify	3		(verb)
-retire	3		(verb)
-rid	3		(verb)
-weigh	3		(verb)
-arrive	2		(verb)
-attach	2		(verb)
-behave	2		(verb)
-celebrate	2		(verb)
-convince	2		(verb)
-disagree	2		(verb)
-establish	2		(verb)
-ignore	2		(verb)
-imply	2		(verb)
-insist	2		(verb)
-pursue	2		(verb)
-remaining	2		(verb)
-specify	2		(verb)
-warn	2		(verb)
-accuse	1		(verb)
-admire	1		(verb)
-admit	1		(verb)
-adopt	1		(verb)
-announce	1		(verb)
-apologize	1		(verb)
-approve	1		(verb)
-attend	1		(verb)
-belong	1		(verb)
-commit	1		(verb)
-criticize	1		(verb)
-deserve	1		(verb)
-destroy	1		(verb)
-hesitate	1		(verb)
-illustrate	1		(verb)
-inform	1		(verb)
-manufacturing	1		(verb)
-persuade	1		(verb)
-pour	1		(verb)
-propose	1		(verb)
-remind	1		(verb)
-shall	1		(verb)
-submit	1		(verb)
-suppose	1		(verb)
-translate	1		(verb)
-be	1145		(verb, auxiliary verb)
-have	891		(verb, auxiliary verb)
-use	319		(verb, noun)
-make	262		(verb, noun)
-look	144		(verb, noun, interjection)
-help	141		(verb, noun, interjection)
-go	131		(verb, noun, adjective)
-being	124		(verb, noun)
-think	116		(verb, adjective, noun)
-read	97		(verb, noun)
-keep	96		(verb, noun)
-start	96		(verb, noun)
-give	93		(verb, noun)
-play	75		(verb, noun)
-feel	74		(verb, noun)
-put	70		(verb, noun)
-set	69		(verb, noun, adjective)
-change	67		(verb, noun)
-say	66		(verb, interjection, noun)
-cut	50		(verb, noun)
-show	50		(verb, noun)
-try	50		(verb, noun)
-check	49		(verb, noun, interjection)
-call	47		(verb, noun)
-move	47		(verb, noun)
-pay	47		(verb, noun)
-let	46		(verb, noun)
-increase	45		(verb, noun)
-turn	44		(verb, noun)
-ask	42		(verb, noun)
-buy	42		(verb, noun)
-guard	42		(verb, noun)
-hold	42		(verb, noun)
-offer	42		(verb, noun)
-travel	41		(verb, noun)
-cook	40		(verb, noun)
-dance	37		(verb, noun)
-excuse	37		(verb, noun)
-live	35		(verb, adjective, adverb)
-purchase	34		(verb, noun)
-deal	33		(verb, noun)
-mean	33		(verb, adjective, noun)
-fall	32		(verb, noun)
-produce	31		(verb, noun)
-search	31		(verb, noun)
-spend	30		(verb, noun)
-talk	30		(verb, noun)
-upset	30		(verb, adjective)
-tell	29		(verb, noun)
-cost	28		(verb, noun)
-drive	28		(verb, noun)
-support	28		(verb, noun)
-remove	27		(verb, noun)
-return	27		(verb, noun)
-run	27		(verb, noun)
-appropriate	26		(verb, adjective)
-reserve	26		(verb, noun)
-leave	25		(verb, noun)
-reach	25		(verb, noun)
-rest	25		(verb, noun)
-serve	25		(verb, noun)
-watch	25		(verb, noun)
-charge	24		(verb, noun)
-break	23		(verb, noun)
-stay	23		(verb, noun)
-visit	23		(verb, noun)
-affect	22		(verb, noun)
-cover	22		(verb, noun)
-report	22		(verb, noun)
-rise	22		(verb, noun)
-walk	21		(verb, noun)
-pick	20		(verb, noun)
-lift	19		(verb, noun)
-mix	19		(verb, noun)
-stop	19		(verb, noun)
-teach	19		(verb, noun)
-concern	18		(verb, noun)
-fly	18		(verb, noun)
-born	17		(verb, adjective, past particple)
-gain	17		(verb, noun)
-save	17		(verb, noun, preposition)
-stand	17		(verb, noun)
-fail	16		(verb, noun)
-lead	16		(verb, noun)
-listen	16		(verb, noun)
-worry	16		(verb, noun)
-express	15		(verb, adjective, adverb)
-handle	15		(verb, noun)
-meet	15		(verb, noun)
-release	15		(verb, noun)
-sell	15		(verb, noun)
-finish	14		(verb, noun)
-press	14		(verb, noun)
-ride	14		(verb, noun)
-spread	14		(verb, noun)
-spring	14		(verb, noun)
-wait	14		(verb, noun)
-display	13		(verb, noun)
-flow	13		(verb, noun)
-hit	13		(verb, noun)
-shoot	13		(verb, noun, interjection)
-touch	13		(verb, noun)
-cancel	12		(verb, noun)
-cry	12		(verb, noun, idiom)
-dump	12		(verb, noun, idiom)
-push	12		(verb, noun, idiom)
-select	12		(verb, adjective)
-conflict	11		(verb, noun)
-die	11		(verb, idiom)
-eat	11		(verb, noun, idiom)
-fill	11		(verb, noun, idiom)
-jump	11		(verb, noun, adjective)
-kick	11		(verb, noun, idiom)
-pass	11		(verb, noun, idiom)
-pitch	11		(verb, noun)
-treat	11		(verb, noun)
-abuse	10		(verb, noun)
-beat	10		(verb, noun, adjective)
-burn	10		(verb, noun)
-deposit	10		(verb, noun)
-print	10		(verb, noun, adjective)
-raise	10		(verb, noun, idiom)
-sleep	10		(verb, noun, idiom)
-advance	9		(verb, noun, adjective)
-connect	9		(verb, adjective)
-consist	9		(verb, noun)
-contribute	9		(verb, idiom)
-draw	9		(verb, noun, idiom)
-fix	9		(verb, noun, idiom)
-hire	9		(verb, noun, adjective)
-join	9		(verb, noun)
-kill	9		(verb, noun, idiom)
-sit	9		(verb, idiom)
-tap	9		(verb, noun)
-win	9		(verb, noun)
-attack	8		(verb, noun)
-claim	8		(verb, noun)
-drag	8		(verb, noun, adjective)
-drink	8		(verb, noun)
-guess	8		(verb, noun, idiom)
-pull	8		(verb, noun)
-wear	8		(verb, noun, idiom)
-wonder	8		(verb, noun, idiom)
-count	7		(verb, noun, adjective)
-doubt	7		(verb, noun, idiom)
-feed	7		(verb, noun, idiom)
-impress	7		(verb, noun)
-repeat	7		(verb, noun)
-seek	7		(verb, idiom)
-sing	7		(verb, noun)
-slide	7		(verb, noun, idiom)
-strip	7		(verb, noun)
-wish	7		(verb, noun)
-collect	6		(verb, adverb, noun)
-combine	6		(verb, noun)
-command	6		(verb, noun)
-dig	6		(verb, noun)
-divide	6		(verb, noun)
-hang	6		(verb, noun, idiom)
-hunt	6		(verb, noun)
-march	6		(verb, noun, idiom)
-mention	6		(verb, noun, idiom)
-smell	6		(verb, noun)
-survey	6		(verb, noun)
-tie	6		(verb, noun, idiom)
-escape	5		(verb, noun, adjective)
-expose	5		(verb, idiom)
-gather	5		(verb, noun, idiom)
-hate	5		(verb, noun)
-repair	5		(verb, noun)
-scratch	5		(verb, noun, adjective)
-strike	5		(verb, noun, adjective)
-employ	4		(verb, noun)
-hurt	4		(verb, noun)
-laugh	4		(verb, noun)
-lay	4		(verb, noun, adjective)
-respond	4		(verb, noun)
-split	4		(verb, noun)
-strain	4		(verb, noun)
-struggle	4		(verb, noun)
-swim	4		(verb, noun)
-train	4		(verb, noun)
-wash	4		(verb, noun)
-waste	4		(verb, adjective, noun)
-convert	3		(verb, noun)
-crash	3		(verb, noun, adjective)
-fold	3		(verb, noun)
-grab	3		(verb, noun)
-hide	3		(verb, noun)
-miss	3		(verb, noun)
-permit	3		(verb, noun)
-quote	3		(verb, noun)
-recover	3		(verb, noun)
-resolve	3		(verb, noun)
-roll	3		(verb, noun)
-sink	3		(verb, noun)
-slip	3		(verb, noun)
-suspect	3		(verb, noun, adjective)
-swing	3		(verb, noun)
-twist	3		(verb, noun)
-concentrate	2		(verb, noun)
-estimate	2		(verb, noun)
-prompt	2		(verb, noun, adjective)
-refuse	2		(verb, noun)
-regret	2		(verb, noun)
-reveal	2		(verb, noun)
-rush	2		(verb, noun)
-shake	2		(verb, noun)
-shift	2		(verb, noun)
-shine	2		(verb, noun)
-steal	2		(verb, noun)
-suck	2		(verb, noun)
-surround	2		(verb, noun)
-bear	1		(verb, noun)
-dare	1		(verb, noun)
-delay	1		(verb, noun)
-hurry	1		(verb, noun)
-invite	1		(verb, noun)
-kiss	1		(verb, noun)
-marry	1		(verb, interjection)
-pop	1		(verb, noun, adverb)
-pray	1		(verb, adverb)
-pretend	1		(verb, adjective)
-punch	1		(verb, noun)
-quit	1		(verb, noun)
-reply	1		(verb, noun)
-resist	1		(verb, noun)
-rip	1		(verb, noun)
-rub	1		(verb, noun)
-smile	1		(verb, noun)
-spell	1		(verb, noun)
-stretch	1		(verb, noun)
-tear	1		(verb, noun)
-wake	1		(verb, noun)
-wrap	1		(verb, noun)
-was	352		(past, verb)
-like	324		(preposition, verb, conjunction)
-even	223		(adjective, verb, adverb)
-film	209		(noun, verb)
-water	201		(noun, verb, adjective)
-been	200		(past, verb)
-well	184		(adverb, verb, noun)
-were	180		(past, verb)
-example	147		(noun, verb)
-own	130		(adjective, verb)
-study	118		(noun, verb)
-must	108		(auxiliary verb, verb, adjective)
-form	99		(noun, verb)
-air	98		(noun, verb)
-place	98		(noun, verb)
-number	97		(noun, verb)
-part	96		(noun, verb, adverb)
-field	95		(noun, verb, adjective)
-fish	92		(noun, verb)
-process	85		(noun, verb)
-heat	84		(noun, verb)
-hand	81		(noun, verb)
-experience	80		(noun, verb)
-job	80		(noun, verb)
-book	77		(noun, verb)
-end	76		(noun, verb)
-point	74		(noun, verb)
-type	74		(noun, verb)
-value	70		(noun, verb)
-body	69		(noun, verb)
-market	69		(noun, verb)
-guide	68		(noun, verb)
-interest	67		(noun, verb)
-state	63		(noun, verb)
-radio	62		(noun, verb)
-course	61		(noun, verb)
-company	60		(noun, verb)
-price	60		(noun, verb)
-size	60		(noun, verb, adjective)
-card	58		(noun, verb)
-list	58		(noun, verb)
-mind	58		(noun, verb)
-trade	58		(noun, verb)
-line	56		(noun, verb)
-care	55		(noun, verb)
-group	55		(noun, verb)
-risk	55		(noun, verb)
-word	55		(noun, verb, interjection)
-force	54		(noun, verb)
-light	54		(noun, verb, adjective)
-name	53		(noun, verb, adjective)
-school	53		(noun, verb)
-amount	51		(noun, verb)
-order	51		(noun, verb)
-practice	51		(noun, verb)
-research	51		(noun, verb)
-sense	51		(noun, verb)
-service	51		(noun, verb)
-piece	50		(noun, verb)
-web	49		(noun, verb)
-boss	48		(noun, verb, adjective)
-sport	47		(noun, verb)
-page	46		(noun, verb)
-term	46		(noun, verb)
-test	46		(noun, verb)
-answer	45		(noun, verb)
-sound	45		(noun, verb, adjective)
-focus	44		(noun, verb)
-matter	44		(noun, verb)
-soil	43		(noun, verb)
-board	42		(noun, verb)
-oil	42		(noun, verb)
-picture	42		(noun, verb)
-access	41		(noun, verb, adjective)
-garden	41		(noun, verb)
-open	41		(adjective, verb, noun)
-range	41		(noun, verb)
-rate	41		(noun, verb)
-reason	41		(noun, verb)
-according	40		(adjective, verb)
-site	40		(noun, verb)
-demand	39		(noun, verb)
-exercise	39		(noun, verb)
-image	39		(noun, verb)
-case	38		(noun, verb)
-cause	38		(noun, verb)
-coast	38		(noun, verb)
-age	37		(noun, verb)
-boat	37		(noun, verb)
-record	37		(noun, verb)
-result	37		(noun, verb)
-section	37		(noun, verb)
-building	36		(noun, verb)
-mouse	36		(noun, verb)
-cash	35		(noun, verb)
-class	35		(noun, verb, adjective)
-dry	35		(adjective, verb, noun)
-plan	35		(noun, verb)
-store	35		(noun, verb)
-tax	35		(noun, verb)
-involved	34		(past, verb)
-side	34		(noun, verb)
-space	33		(noun, verb)
-rule	32		(noun, verb)
-weather	32		(noun, verb)
-figure	31		(noun, verb)
-man	31		(noun, verb, interjection)
-model	31		(noun, verb)
-source	31		(noun, verb)
-earth	30		(noun, verb)
-program	30		(noun, verb)
-design	29		(noun, verb)
-feature	29		(noun, verb)
-purpose	29		(noun, verb)
-question	29		(noun, verb)
-rock	29		(noun, verb)
-act	28		(noun, verb)
-birth	28		(noun, verb)
-dog	28		(noun, verb)
-object	28		(noun, verb)
-scale	28		(noun, verb)
-sun	28		(noun, verb)
-fit	27		(adjective, verb, noun)
-note	27		(noun, verb)
-profit	27		(noun, verb)
-related	27		(past, verb)
-rent	27		(noun, verb)
-speed	27		(noun, verb)
-style	27		(noun, verb)
-war	27		(noun, verb)
-bank	26		(noun, verb)
-content	26		(adjective, verb, noun)
-craft	26		(noun, verb)
-bus	25		(noun, verb)
-exchange	25		(noun, verb)
-eye	25		(noun, verb)
-fire	25		(noun, verb)
-position	25		(noun, verb)
-pressure	25		(noun, verb)
-stress	25		(noun, verb)
-advantage	24		(noun, verb)
-benefit	24		(noun, verb)
-box	24		(noun, verb)
-complete	24		(adjective, verb)
-frame	24		(noun, verb)
-issue	24		(noun, verb)
-limited	24		(past, verb)
-step	24		(noun, verb)
-cycle	23		(noun, verb)
-face	23		(noun, verb)
-interested	23		(past, verb)
-metal	23		(noun, verb)
-paint	23		(noun, verb)
-review	23		(noun, verb)
-room	23		(noun, verb)
-screen	23		(noun, verb)
-structure	23		(noun, verb)
-view	23		(noun, verb)
-account	22		(noun, verb)
-ball	22		(noun, verb)
-concerned	22		(past, verb)
-discipline	22		(noun, verb)
-ready	22		(adjective, verb)
-share	22		(noun, verb)
-balance	21		(noun, verb)
-bit	21		(noun, verb)
-black	21		(noun, verb, adjective)
-bottom	21		(noun, verb, adjective)
-gift	21		(noun, verb)
-impact	21		(noun, verb)
-machine	21		(noun, verb)
-shape	21		(noun, verb)
-tool	21		(noun, verb)
-wind	21		(noun, verb)
-address	20		(noun, verb)
-average	20		(noun, verb, adjective)
-career	20		(noun, verb, adjective)
-culture	20		(noun, verb)
-pot	20		(noun, verb)
-sign	20		(noun, verb)
-table	20		(noun, verb)
-task	20		(noun, verb)
-condition	19		(noun, verb)
-contact	19		(noun, verb)
-credit	19		(noun, verb)
-egg	19		(noun, verb)
-hope	19		(noun, verb)
-ice	19		(noun, verb)
-network	19		(noun, verb)
-separate	19		(adjective, verb, noun)
-attempt	18		(noun, verb)
-date	18		(noun, verb)
-effect	18		(noun, verb)
-link	18		(noun, verb)
-perfect	18		(adjective, verb, noun)
-post	18		(noun, verb, adverb)
-star	18		(noun, verb)
-voice	18		(noun, verb)
-challenge	17		(noun, verb, adjective)
-friend	17		(noun, verb)
-warm	17		(adjective, verb)
-brush	16		(noun, verb)
-couple	16		(noun, verb)
-debate	16		(noun, verb)
-exit	16		(noun, verb)
-experienced	16		(past, verb)
-function	16		(noun, verb)
-lack	16		(noun, verb)
-plant	16		(noun, verb)
-spot	16		(noun, verb)
-summer	16		(noun, verb)
-taste	16		(noun, verb)
-theme	16		(noun, verb)
-track	16		(noun, verb)
-wing	16		(noun, verb)
-brain	15		(noun, verb)
-button	15		(noun, verb)
-click	15		(noun, verb)
-correct	15		(adjective, verb)
-desire	15		(noun, verb)
-fixed	15		(past, verb)
-foot	15		(noun, verb)
-gas	15		(noun, verb)
-influence	15		(noun, verb)
-notice	15		(noun, verb)
-rain	15		(noun, verb)
-wall	15		(noun, verb)
-base	14		(noun, verb, adjective)
-damage	14		(noun, verb)
-distance	14		(noun, verb)
-pair	14		(noun, verb)
-staff	14		(noun, verb)
-sugar	14		(noun, verb)
-target	14		(noun, verb)
-text	14		(noun, verb)
-author	13		(noun, verb)
-complicated	13		(past, verb)
-discount	13		(noun, verb, adjective)
-file	13		(noun, verb)
-ground	13		(noun, verb, adjective)
-lesson	13		(noun, verb)
-officer	13		(noun, verb)
-phase	13		(noun, verb)
-reference	13		(noun, verb, adjective)
-register	13		(noun, verb)
-secure	13		(adjective, verb)
-sky	13		(noun, verb)
-stage	13		(noun, verb)
-stick	13		(noun, verb)
-title	13		(noun, verb)
-trouble	13		(noun, verb)
-advanced	12		(past, verb, adjective)
-bowl	12		(noun, verb)
-bridge	12		(noun, verb)
-campaign	12		(noun, verb)
-club	12		(noun, verb)
-edge	12		(noun, verb, idiom)
-evidence	12		(noun, verb, idiom)
-fan	12		(noun, verb, idiom)
-letter	12		(noun, verb, idiom)
-lock	12		(noun, verb, idiom)
-option	12		(noun, verb)
-organized	12		(past, verb)
-pack	12		(noun, verb, adjective)
-park	12		(noun, verb)
-quarter	12		(noun, verb, adjective)
-skin	12		(noun, verb)
-sort	12		(noun, verb)
-weight	12		(noun, verb)
-baby	11		(noun, verb, adjective)
-carry	11		(noun, verb)
-dish	11		(noun, verb, idiom)
-exact	11		(adjective, verb)
-factor	11		(noun, verb)
-fruit	11		(noun, verb)
-muscle	11		(noun, verb, adjective)
-traffic	11		(noun, verb)
-trip	11		(noun, verb, idiom)
-appeal	10		(noun, verb)
-chart	10		(noun, verb)
-gear	10		(noun, verb, adjective)
-land	10		(noun, verb, idiom)
-log	10		(noun, verb)
-lost	10		(adjective, verb, idiom)
-net	10		(noun, verb)
-season	10		(noun, verb, idiom)
-spirit	10		(noun, verb, idiom)
-tree	10		(noun, verb, idiom)
-wave	10		(noun, verb, idiom)
-belt	9		(noun, verb)
-bench	9		(noun, verb)
-closed	9		(past, verb)
-commission	9		(noun, verb)
-copy	9		(noun, verb, idiom)
-drop	9		(noun, verb)
-firm	9		(adjective, verb, adverb)
-frequent	9		(adjective, verb)
-progress	9		(noun, verb, idiom)
-project	9		(noun, verb)
-stuff	9		(noun, verb)
-ticket	9		(noun, verb, idiom)
-tour	9		(noun, verb)
-angle	8		(noun, verb)
-blue	8		(noun, verb, adjective)
-breakfast	8		(noun, verb)
-doctor	8		(noun, verb)
-dot	8		(noun, verb, idiom)
-dream	8		(noun, verb, adjective)
-essay	8		(noun, verb)
-father	8		(noun, verb)
-fee	8		(noun, verb)
-finance	8		(noun, verb)
-juice	8		(noun, verb, idiom)
-limit	8		(noun, verb)
-luck	8		(noun, verb, idiom)
-milk	8		(noun, verb, idiom)
-mixed	8		(past, verb)
-mouth	8		(noun, verb, idiom)
-pipe	8		(noun, verb)
-please	8		(adverb, verb, idiom)
-seat	8		(noun, verb)
-stable	8		(noun, verb)
-storm	8		(noun, verb, idiom)
-team	8		(noun, verb, adjective)
-amazing	7		(adjective, verb)
-bat	7		(noun, verb)
-beach	7		(noun, verb)
-blank	7		(noun, verb, adjective)
-busy	7		(adjective, verb)
-catch	7		(noun, verb)
-chain	7		(noun, verb)
-cream	7		(noun, verb, adjective)
-crew	7		(noun, verb)
-detail	7		(noun, verb, idiom)
-detailed	7		(past, verb)
-interview	7		(noun, verb)
-kid	7		(noun, verb, adjective)
-mark	7		(noun, verb, idiom)
-match	7		(noun, verb)
-pain	7		(noun, verb, idiom)
-pleasure	7		(noun, verb)
-score	7		(noun, verb, idiom)
-screw	7		(noun, verb, idiom)
-sex	7		(noun, verb, idiom)
-sharp	7		(adjective, verb, adverb)
-shop	7		(noun, verb, interjection)
-shower	7		(noun, verb, idiom)
-suit	7		(noun, verb, idiom)
-tone	7		(noun, verb)
-window	7		(noun, verb)
-wise	7		(adjective, verb, idiom)
-band	6		(noun, verb)
-block	6		(noun, verb)
-bone	6		(noun, verb, adverb)
-calendar	6		(noun, verb)
-cap	6		(noun, verb)
-coat	6		(noun, verb)
-contest	6		(noun, verb)
-court	6		(noun, verb, idiom)
-cup	6		(noun, verb)
-district	6		(noun, verb)
-finger	6		(noun, verb, idiom)
-garage	6		(noun, verb)
-guarantee	6		(noun, verb)
-hole	6		(noun, verb, idiom)
-hook	6		(noun, verb, idiom)
-implement	6		(noun, verb)
-layer	6		(noun, verb)
-lecture	6		(noun, verb)
-lie	6		(noun, verb, idiom)
-married	6		(past, verb, adjective)
-narrow	6		(adjective, verb, noun)
-nose	6		(noun, verb, idiom)
-partner	6		(noun, verb)
-profile	6		(noun, verb)
-respect	6		(noun, verb)
-rice	6		(noun, verb)
-schedule	6		(noun, verb)
-telephone	6		(noun, verb)
-tip	6		(noun, verb)
-bag	5		(noun, verb)
-battle	5		(noun, verb)
-bed	5		(noun, verb)
-bill	5		(noun, verb)
-bother	5		(noun, verb)
-cake	5		(noun, verb)
-code	5		(noun, verb)
-curve	5		(noun, verb, idiom)
-dimension	5		(noun, verb)
-ease	5		(noun, verb)
-farm	5		(noun, verb, idiom)
-fight	5		(noun, verb)
-gap	5		(noun, verb)
-grade	5		(noun, verb)
-horse	5		(noun, verb, adjective)
-host	5		(noun, verb)
-husband	5		(noun, verb)
-loan	5		(noun, verb, idiom)
-mistake	5		(noun, verb, idiom)
-nail	5		(noun, verb, idiom)
-noise	5		(noun, verb)
-occasion	5		(noun, verb, idiom)
-package	5		(noun, verb)
-pause	5		(noun, verb, idiom)
-phrase	5		(noun, verb)
-race	5		(noun, verb)
-sand	5		(noun, verb, idiom)
-sentence	5		(noun, verb)
-shoulder	5		(noun, verb, idiom)
-smoke	5		(noun, verb, idiom)
-stomach	5		(noun, verb)
-string	5		(noun, verb, idiom)
-surprised	5		(past, verb)
-towel	5		(noun, verb)
-vacation	5		(noun, verb)
-wheel	5		(noun, verb, idiom)
-arm	4		(noun, verb)
-associate	4		(noun, verb, adjective)
-bet	4		(noun, verb)
-blow	4		(noun, verb)
-border	4		(noun, verb)
-branch	4		(noun, verb)
-breast	4		(noun, verb)
-buddy	4		(noun, verb)
-bunch	4		(noun, verb)
-chip	4		(noun, verb)
-coach	4		(noun, verb, adverb)
-cross	4		(noun, verb, adjective)
-document	4		(noun, verb)
-draft	4		(noun, verb, adjective)
-dust	4		(noun, verb)
-floor	4		(noun, verb)
-golf	4		(noun, verb)
-habit	4		(noun, verb)
-iron	4		(noun, verb)
-judge	4		(noun, verb)
-knife	4		(noun, verb)
-landscape	4		(noun, verb)
-league	4		(noun, verb)
-mail	4		(noun, verb)
-mess	4		(noun, verb)
-parent	4		(noun, verb)
-pattern	4		(noun, verb)
-pin	4		(noun, verb)
-pool	4		(noun, verb)
-pound	4		(noun, verb)
-request	4		(noun, verb)
-salary	4		(noun, verb)
-shame	4		(noun, verb)
-shelter	4		(noun, verb)
-shoe	4		(noun, verb)
-tackle	4		(noun, verb)
-tank	4		(noun, verb)
-trust	4		(noun, verb)
-assist	3		(noun, verb)
-bake	3		(noun, verb)
-bar	3		(noun, verb, preposition)
-bell	3		(noun, verb)
-bike	3		(noun, verb)
-blame	3		(noun, verb)
-brick	3		(noun, verb)
-chair	3		(noun, verb)
-closet	3		(noun, verb, adjective)
-clue	3		(noun, verb)
-collar	3		(noun, verb)
-comment	3		(noun, verb)
-conference	3		(noun, verb)
-devil	3		(noun, verb)
-diet	3		(noun, verb)
-fear	3		(noun, verb)
-fuel	3		(noun, verb)
-glove	3		(noun, verb)
-jacket	3		(noun, verb)
-lunch	3		(noun, verb)
-monitor	3		(noun, verb)
-mortgage	3		(noun, verb)
-nurse	3		(noun, verb)
-pace	3		(noun, verb, preposition)
-panic	3		(noun, verb)
-peak	3		(noun, verb, adjective)
-provided	3		(past, verb)
-reward	3		(noun, verb)
-row	3		(noun, verb)
-sandwich	3		(noun, verb)
-shock	3		(noun, verb)
-spite	3		(noun, verb)
-spray	3		(noun, verb)
-surprise	3		(noun, verb)
-till	3		(noun, verb)
-transition	3		(noun, verb)
-weekend	3		(noun, verb)
-yard	3		(noun, verb)
-alarm	2		(noun, verb)
-bend	2		(noun, verb)
-bicycle	2		(noun, verb)
-bite	2		(noun, verb)
-blind	2		(noun, verb, adjective)
-bottle	2		(noun, verb)
-cable	2		(noun, verb)
-candle	2		(noun, verb)
-clerk	2		(noun, verb)
-cloud	2		(noun, verb)
-concert	2		(noun, verb)
-counter	2		(noun, verb, adverb)
-dirty	2		(adjective, verb)
-flower	2		(noun, verb)
-grandfather	2		(noun, verb)
-harm	2		(noun, verb)
-knee	2		(noun, verb)
-lawyer	2		(noun, verb)
-load	2		(noun, verb)
-loose	2		(adjective, verb)
-mirror	2		(noun, verb)
-neck	2		(noun, verb)
-pension	2		(noun, verb)
-plate	2		(noun, verb)
-pleased	2		(past, verb)
-proposed	2		(past, verb)
-ruin	2		(noun, verb)
-ship	2		(noun, verb)
-skirt	2		(noun, verb)
-slice	2		(noun, verb)
-snow	2		(noun, verb)
-stroke	2		(noun, verb)
-switch	2		(noun, verb)
-tired	2		(past, verb)
-trash	2		(noun, verb)
-tune	2		(noun, verb)
-worried	2		(past, verb)
-zone	2		(noun, verb)
-anger	1		(noun, verb)
-award	1		(noun, verb)
-bid	1		(noun, verb)
-boot	1		(noun, verb)
-bug	1		(noun, verb)
-camp	1		(noun, verb, adjective)
-candy	1		(noun, verb)
-carpet	1		(noun, verb)
-cat	1		(noun, verb)
-champion	1		(noun, verb)
-channel	1		(noun, verb)
-clock	1		(noun, verb)
-comfort	1		(noun, verb)
-cow	1		(noun, verb)
-crack	1		(noun, verb, adjective)
-disappointed	1		(past, verb)
-empty	1		(adjective, verb, noun)
-engineer	1		(noun, verb)
-entrance	1		(noun, verb)
-fault	1		(noun, verb)
-grass	1		(noun, verb)
-guy	1		(noun, verb)
-highlight	1		(noun, verb)
-island	1		(noun, verb)
-joke	1		(noun, verb)
-jury	1		(noun, verb, adjective)
-leg	1		(noun, verb)
-lip	1		(noun, verb)
-mate	1		(noun, verb)
-nerve	1		(noun, verb)
-passage	1		(noun, verb)
-pen	1		(noun, verb)
-pride	1		(noun, verb)
-priest	1		(noun, verb)
-promise	1		(noun, verb)
-resort	1		(noun, verb)
-ring	1		(noun, verb)
-roof	1		(noun, verb)
-rope	1		(noun, verb)
-sail	1		(noun, verb)
-scheme	1		(noun, verb)
-script	1		(noun, verb)
-slight	1		(adjective, verb, noun)
-smart	1		(adjective, verb, noun)
-sock	1		(noun, verb)
-station	1		(noun, verb)
-toe	1		(noun, verb)
-tower	1		(noun, verb)
-truck	1		(noun, verb)
-witness	1		(noun, verb)
+is
+are
+has
+get
+see
+need
+know
+would
+find
+take
+want
+does
+learn
+become
+come
+include
+thank
+provide
+create
+add
+understand
+consider
+choose
+develop
+remember
+determine
+grow
+allow
+supply
+bring
+improve
+maintain
+begin
+exist
+tend
+enjoy
+perform
+decide
+identify
+continue
+protect
+require
+occur
+write
+approach
+avoid
+prepare
+build
+achieve
+believe
+receive
+seem
+discuss
+realize
+contain
+follow
+refer
+solve
+describe
+prefer
+prevent
+discover
+ensure
+expect
+invest
+reduce
+speak
+appear
+explain
+explore
+involve
+lose
+afford
+agree
+hear
+remain
+represent
+apply
+forget
+recommend
+rely
+vary
+generate
+obtain
+accept
+communicate
+complain
+depend
+enter
+happen
+indicate
+suggest
+survive
+appreciate
+compare
+imagine
+manage
+differ
+encourage
+expand
+prove
+react
+recognize
+relax
+replace
+borrow
+earn
+emphasize
+enable
+operate
+reflect
+send
+anticipate
+assume
+engage
+enhance
+examine
+install
+participate
+intend
+introduce
+relate
+settle
+assure
+attract
+distribute
+overcome
+owe
+succeed
+suffer
+throw
+acquire
+adapt
+adjust
+argue
+arise
+confirm
+encouraging
+incorporate
+justify
+organize
+ought
+possess
+relieve
+retain
+shut
+calculate
+compete
+consult
+deliver
+extend
+investigate
+negotiate
+qualify
+retire
+rid
+weigh
+arrive
+attach
+behave
+celebrate
+convince
+disagree
+establish
+ignore
+imply
+insist
+pursue
+remaining
+specify
+warn
+accuse
+admire
+admit
+adopt
+announce
+apologize
+approve
+attend
+belong
+commit
+criticize
+deserve
+destroy
+hesitate
+illustrate
+inform
+manufacturing
+persuade
+pour
+propose
+remind
+shall
+submit
+suppose
+translate
+be
+have
+use
+make
+look
+help
+go
+being
+think
+read
+keep
+start
+give
+play
+feel
+put
+set
+change
+say
+cut
+show
+try
+check
+call
+move
+pay
+let
+increase
+turn
+ask
+buy
+guard
+hold
+offer
+travel
+cook
+dance
+excuse
+live
+purchase
+deal
+mean
+fall
+produce
+search
+spend
+talk
+upset
+tell
+cost
+drive
+support
+remove
+return
+run
+appropriate
+reserve
+leave
+reach
+rest
+serve
+watch
+charge
+break
+stay
+visit
+affect
+cover
+report
+rise
+walk
+pick
+lift
+mix
+stop
+teach
+concern
+fly
+born
+gain
+save
+stand
+fail
+lead
+listen
+worry
+express
+handle
+meet
+release
+sell
+finish
+press
+ride
+spread
+spring
+wait
+display
+flow
+hit
+shoot
+touch
+cancel
+cry
+dump
+push
+select
+conflict
+die
+eat
+fill
+jump
+kick
+pass
+pitch
+treat
+abuse
+beat
+burn
+deposit
+print
+raise
+sleep
+advance
+connect
+consist
+contribute
+draw
+fix
+hire
+join
+kill
+sit
+tap
+win
+attack
+claim
+drag
+drink
+guess
+pull
+wear
+wonder
+count
+doubt
+feed
+impress
+repeat
+seek
+sing
+slide
+strip
+wish
+collect
+combine
+command
+dig
+divide
+hang
+hunt
+march
+mention
+smell
+survey
+tie
+escape
+expose
+gather
+hate
+repair
+scratch
+strike
+employ
+hurt
+laugh
+lay
+respond
+split
+strain
+struggle
+swim
+train
+wash
+waste
+convert
+crash
+fold
+grab
+hide
+miss
+permit
+quote
+recover
+resolve
+roll
+sink
+slip
+suspect
+swing
+twist
+concentrate
+estimate
+prompt
+refuse
+regret
+reveal
+rush
+shake
+shift
+shine
+steal
+suck
+surround
+bear
+dare
+delay
+hurry
+invite
+kiss
+marry
+pop
+pray
+pretend
+punch
+quit
+reply
+resist
+rip
+rub
+smile
+spell
+stretch
+tear
+wake
+wrap
+was
+like
+even
+film
+water
+been
+well
+were
+example
+own
+study
+must
+form
+air
+place
+number
+part
+field
+fish
+process
+heat
+hand
+experience
+job
+book
+end
+point
+type
+value
+body
+market
+guide
+interest
+state
+radio
+course
+company
+price
+size
+card
+list
+mind
+trade
+line
+care
+group
+risk
+word
+force
+light
+name
+school
+amount
+order
+practice
+research
+sense
+service
+piece
+web
+boss
+sport
+page
+term
+test
+answer
+sound
+focus
+matter
+soil
+board
+oil
+picture
+access
+garden
+open
+range
+rate
+reason
+according
+site
+demand
+exercise
+image
+case
+cause
+coast
+age
+boat
+record
+result
+section
+building
+mouse
+cash
+class
+dry
+plan
+store
+tax
+involved
+side
+space
+rule
+weather
+figure
+man
+model
+source
+earth
+program
+design
+feature
+purpose
+question
+rock
+act
+birth
+dog
+object
+scale
+sun
+fit
+note
+profit
+related
+rent
+speed
+style
+war
+bank
+content
+craft
+bus
+exchange
+eye
+fire
+position
+pressure
+stress
+advantage
+benefit
+box
+complete
+frame
+issue
+limited
+step
+cycle
+face
+interested
+metal
+paint
+review
+room
+screen
+structure
+view
+account
+ball
+concerned
+discipline
+ready
+share
+balance
+bit
+black
+bottom
+gift
+impact
+machine
+shape
+tool
+wind
+address
+average
+career
+culture
+pot
+sign
+table
+task
+condition
+contact
+credit
+egg
+hope
+ice
+network
+separate
+attempt
+date
+effect
+link
+perfect
+post
+star
+voice
+challenge
+friend
+warm
+brush
+couple
+debate
+exit
+experienced
+function
+lack
+plant
+spot
+summer
+taste
+theme
+track
+wing
+brain
+button
+click
+correct
+desire
+fixed
+foot
+gas
+influence
+notice
+rain
+wall
+base
+damage
+distance
+pair
+staff
+sugar
+target
+text
+author
+complicated
+discount
+file
+ground
+lesson
+officer
+phase
+reference
+register
+secure
+sky
+stage
+stick
+title
+trouble
+advanced
+bowl
+bridge
+campaign
+club
+edge
+evidence
+fan
+letter
+lock
+option
+organized
+pack
+park
+quarter
+skin
+sort
+weight
+baby
+carry
+dish
+exact
+factor
+fruit
+muscle
+traffic
+trip
+appeal
+chart
+gear
+land
+log
+lost
+net
+season
+spirit
+tree
+wave
+belt
+bench
+closed
+commission
+copy
+drop
+firm
+frequent
+progress
+project
+stuff
+ticket
+tour
+angle
+blue
+breakfast
+doctor
+dot
+dream
+essay
+father
+fee
+finance
+juice
+limit
+luck
+milk
+mixed
+mouth
+pipe
+please
+seat
+stable
+storm
+team
+amazing
+bat
+beach
+blank
+busy
+catch
+chain
+cream
+crew
+detail
+detailed
+interview
+kid
+mark
+match
+pain
+pleasure
+score
+screw
+sex
+sharp
+shop
+shower
+suit
+tone
+window
+wise
+band
+block
+bone
+calendar
+cap
+coat
+contest
+court
+cup
+district
+finger
+garage
+guarantee
+hole
+hook
+implement
+layer
+lecture
+lie
+married
+narrow
+nose
+partner
+profile
+respect
+rice
+schedule
+telephone
+tip
+bag
+battle
+bed
+bill
+bother
+cake
+code
+curve
+dimension
+ease
+farm
+fight
+gap
+grade
+horse
+host
+husband
+loan
+mistake
+nail
+noise
+occasion
+package
+pause
+phrase
+race
+sand
+sentence
+shoulder
+smoke
+stomach
+string
+surprised
+towel
+vacation
+wheel
+arm
+associate
+bet
+blow
+border
+branch
+breast
+buddy
+bunch
+chip
+coach
+cross
+document
+draft
+dust
+floor
+golf
+habit
+iron
+judge
+knife
+landscape
+league
+mail
+mess
+parent
+pattern
+pin
+pool
+pound
+request
+salary
+shame
+shelter
+shoe
+tackle
+tank
+trust
+assist
+bake
+bar
+bell
+bike
+blame
+brick
+chair
+closet
+clue
+collar
+comment
+conference
+devil
+diet
+fear
+fuel
+glove
+jacket
+lunch
+monitor
+mortgage
+nurse
+pace
+panic
+peak
+provided
+reward
+row
+sandwich
+shock
+spite
+spray
+surprise
+till
+transition
+weekend
+yard
+alarm
+bend
+bicycle
+bite
+blind
+bottle
+cable
+candle
+clerk
+cloud
+concert
+counter
+dirty
+flower
+grandfather
+harm
+knee
+lawyer
+load
+loose
+mirror
+neck
+pension
+plate
+pleased
+proposed
+ruin
+ship
+skirt
+slice
+snow
+stroke
+switch
+tired
+trash
+tune
+worried
+zone
+anger
+award
+bid
+boot
+bug
+camp
+candy
+carpet
+cat
+champion
+channel
+clock
+comfort
+cow
+crack
+disappointed
+empty
+engineer
+entrance
+fault
+grass
+guy
+highlight
+island
+joke
+jury
+leg
+lip
+mate
+nerve
+passage
+pen
+pride
+priest
+promise
+resort
+ring
+roof
+rope
+sail
+scheme
+script
+slight
+smart
+sock
+station
+toe
+tower
+truck
+witness

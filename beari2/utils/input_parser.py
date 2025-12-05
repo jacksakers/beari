@@ -123,20 +123,12 @@ class InputParser:
             if token in self.relation_verbs:
                 return (i, token)
         
-        # Common verbs pattern (very basic)
-        common_verbs = [
-            'do', 'does', 'did', 'make', 'makes', 'made',
-            'go', 'goes', 'went', 'get', 'gets', 'got',
-            'see', 'saw', 'know', 'knew', 'think', 'thought',
-            'take', 'takes', 'took', 'come', 'comes', 'came',
-            'want', 'wants', 'wanted', 'use', 'uses', 'used',
-            'find', 'finds', 'found', 'give', 'gives', 'gave',
-            'tell', 'tells', 'told', 'work', 'works', 'worked',
-            'call', 'calls', 'called', 'try', 'tries', 'tried',
-            'ask', 'asks', 'asked', 'need', 'needs', 'needed',
-            'become', 'becomes', 'became', 'leave', 'leaves', 'left',
-            'put', 'puts', 'help', 'helps', 'helped',
-        ]
+        # import list of common verbs from verbs.txt
+        try:
+            with open('training_data/verbs.txt', 'r') as f:
+                common_verbs = set(line.strip().lower() for line in f if line.strip())
+        except FileNotFoundError:
+            common_verbs = set()
         
         for i, token in enumerate(tokens):
             if token in common_verbs:

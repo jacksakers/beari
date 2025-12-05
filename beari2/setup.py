@@ -60,7 +60,7 @@ def main():
     print("="*70)
     print()
     print("This script will:")
-    print("  1. Install Python dependencies (Flask, Flask-CORS)")
+    # print("  1. Install Python dependencies (Flask, Flask-CORS)")
     print("  2. Initialize the database")
     print("  3. Run system tests")
     print()
@@ -71,12 +71,12 @@ def main():
         print("\nSetup cancelled.")
         return
     
-    # Step 1: Install dependencies
-    print()
-    if not install_dependencies():
-        print("\n⚠️  Setup incomplete. Please install dependencies manually.")
-        print("   Run: pip install -r requirements.txt")
-        return
+    # # Step 1: Install dependencies
+    # print()
+    # if not install_dependencies():
+    #     print("\n⚠️  Setup incomplete. Please install dependencies manually.")
+    #     print("   Run: pip install -r requirements.txt")
+    #     return
     
     # Step 2: Initialize database
     if not initialize_db():
