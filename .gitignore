@@ -3,3 +3,7 @@ db/__pycache__/*
 
 # Ignore trained model files
 trained_model.json
+
+
+# ignore all __pycache__ directories
+*.pyc
