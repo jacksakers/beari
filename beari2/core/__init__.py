@@ -9,6 +9,8 @@ from .gap_analysis import (
 )
 from .object_manager import ObjectManager
 from .question_generator import generate_question, generate_confirmation
+from .game_engine import GameEngine, ResponseCandidate, SentimentAnalyzer
+from .question_answerer import QuestionAnswerer
 
 __all__ = [
     'find_learning_opportunity',
@@ -18,5 +20,9 @@ __all__ = [
     'suggest_next_question_field',
     'ObjectManager',
     'generate_question',
-    'generate_confirmation'
+    'generate_confirmation',
+    'GameEngine',
+    'ResponseCandidate',
+    'SentimentAnalyzer',
+    'QuestionAnswerer'
 ]

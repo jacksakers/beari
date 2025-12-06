@@ -14,6 +14,8 @@ from models.living_object import LivingObject
 from core.object_manager import ObjectManager
 from core.gap_analysis import find_learning_opportunity, suggest_next_question_field
 from core.question_generator import generate_question, generate_confirmation
+from core.game_engine import GameEngine
+from core.question_answerer import QuestionAnswerer
 from utils.input_parser import InputParser
 from db import initialize_database, get_object_count, DatabaseConnection
 
@@ -26,19 +28,28 @@ class Beari2:
     - Parses input to extract subjects, predicates, objects
     - Creates and updates Living Objects dynamically
     - Identifies knowledge gaps and asks targeted questions
+    - Answers user questions using database knowledge
     - Confirms learning through natural responses
     """
     
-    def __init__(self, db_path: str = "beari2.db"):
+    def __init__(self, db_path: str = "beari2.db", use_game_engine: bool = True):
         """
         Initialize Beari2.
         
         Args:
             db_path: Path to database file
+            use_game_engine: Enable the conversation game engine for optimized responses
         """
         self.db_path = db_path
         self.manager = ObjectManager(db_path)
         self.parser = InputParser()
+        
+        # Game Engine (optional)
+        self.use_game_engine = use_game_engine
+        self.game_engine = GameEngine() if use_game_engine else None
+        
+        # Question Answerer
+        self.answerer = QuestionAnswerer(self.manager)
         
         # Learning state
         self.waiting_for_answer = False
@@ -68,11 +79,41 @@ class Beari2:
         if user_input.lower() == 'stats':
             return self._show_stats()
         
+        if user_input.lower() == 'score':
+            return self._show_game_score()
+        
         if user_input.lower() == 'help':
             return self._show_help()
         
+        # if user enters ? then generate a question about a random object
+        if user_input.strip() == '?':
+            all_objects = self.manager.get_all()
+            for obj in all_objects:
+                field = suggest_next_question_field(obj)
+                if field:
+                    question = generate_question(obj.word, field, obj.pos)
+                    self.waiting_for_answer = True
+                    self.current_question_object = obj
+                    self.current_question_field = field
+                    return {
+                        'type': 'asking',
+                        'question': question,
+                        'object': obj.word,
+                        'field': field
+                    }
+            return {
+                'type': 'no_question',
+                'message': "I don't have any questions right now. Teach me something new!"
+            }
+        
         # If waiting for answer to a question
         if self.waiting_for_answer and self.current_question_object:
+            # if the user input is empty, treat it as a pass and do not process
+            if not user_input:
+                self.waiting_for_answer = False
+                self.current_question_object = None
+                self.current_question_field = None
+                return {'type': 'pass', 'message': 'No answer provided. Moving on.'}
             return self._process_learning_answer(user_input)
         
         # Otherwise, parse and learn from the input
@@ -81,6 +122,7 @@ class Beari2:
     def _process_new_sentence(self, sentence: str) -> Dict:
         """
         Process a new sentence: parse, create objects, update properties.
+        Handles both questions and statements differently.
         
         Args:
             sentence: User's sentence
@@ -90,57 +132,144 @@ class Beari2:
         """
         # Parse the sentence
         parsed = self.parser.parse_sentence(sentence)
+        sentence_type = parsed.get('sentence_type', 'statement')
         
-        # Extract relations
+        # If user asked a question, try to answer it first
+        answer_result = None
+        if sentence_type == 'question':
+            answer_result = self.answerer.answer_question(parsed)
+        
+        # Extract relations (for statements, learn from them)
         relations = self.parser.extract_relations(parsed)
         
         # Update or create objects for each component
         updated_objects = []
         
-        if parsed['subject']:
-            obj = self.manager.create_or_get(parsed['subject'], 'Noun')
-            updated_objects.append(obj)
-        
-        if parsed['object']:
-            # Infer POS from context
-            pos = 'Adjective' if parsed['verb_relation'] == 'is' else 'Noun'
-            obj = self.manager.create_or_get(parsed['object'], pos)
-            updated_objects.append(obj)
-        
-        if parsed['verb'] and parsed['verb'] not in self.parser.relation_verbs:
-            obj = self.manager.create_or_get(parsed['verb'], 'Verb')
-            updated_objects.append(obj)
-        
-        # Apply relations
-        for relation in relations:
-            source_obj = self.manager.create_or_get(relation['source'], 'Noun')
-            source_obj.add_property(relation['relation'], relation['target'])
-            self.manager.save_object(source_obj)
+        # Only create/update objects if it's a statement (learning)
+        # For questions, we just look up existing objects
+        if sentence_type == 'statement':
+            if parsed['subject']:
+                obj = self.manager.create_or_get(parsed['subject'], 'Noun')
+                updated_objects.append(obj)
             
-            # Update the object in updated_objects if it exists there
-            for i, obj in enumerate(updated_objects):
-                if obj.word == source_obj.word and obj.pos == source_obj.pos:
-                    updated_objects[i] = source_obj
-                    break
-            else:
-                # If not in list, add it
-                updated_objects.append(source_obj)
+            if parsed['object']:
+                # Infer POS from context
+                pos = 'Adjective' if parsed['verb_relation'] == 'is' else 'Noun'
+                obj = self.manager.create_or_get(parsed['object'], pos)
+                updated_objects.append(obj)
+            
+            if parsed['verb'] and parsed['verb'] not in self.parser.relation_verbs:
+                obj = self.manager.create_or_get(parsed['verb'], 'Verb')
+                updated_objects.append(obj)
+            
+            # Apply relations
+            for relation in relations:
+                source_obj = self.manager.create_or_get(relation['source'], 'Noun')
+                source_obj.add_property(relation['relation'], relation['target'])
+                self.manager.save_object(source_obj)
+                
+                # Update the object in updated_objects if it exists there
+                for i, obj in enumerate(updated_objects):
+                    if obj.word == source_obj.word and obj.pos == source_obj.pos:
+                        updated_objects[i] = source_obj
+                        break
+                else:
+                    # If not in list, add it
+                    updated_objects.append(source_obj)
+            
+            # Save all updated objects
+            for obj in updated_objects:
+                self.manager.save_object(obj)
+        else:
+            # For questions, just load the relevant objects for context
+            if parsed.get('question_target'):
+                obj = self.manager.load_object(parsed['question_target'])
+                if obj:
+                    updated_objects.append(obj)
+            if parsed.get('subject'):
+                obj = self.manager.load_object(parsed['subject'])
+                if obj and obj not in updated_objects:
+                    updated_objects.append(obj)
         
-        # Save all updated objects
+        # Generate confirmation (for statements)
+        confirmation = self._generate_confirmation(parsed, relations) if sentence_type == 'statement' else None
+        
+        # Find gap for inquiry mode
+        gap_field = None
+        gap_object = None
         for obj in updated_objects:
-            self.manager.save_object(obj)
+            field = suggest_next_question_field(obj)
+            if field:
+                gap_field = field
+                gap_object = obj
+                break
         
-        # Generate confirmation
-        confirmation = self._generate_confirmation(parsed, relations)
+        # Use Game Engine if enabled
+        if self.use_game_engine and self.game_engine:
+            # Get related objects for connector responses
+            related_objects = [o for o in updated_objects if o != gap_object][:3]
+            
+            # Play a game turn with answer_result for questions
+            game_result = self.game_engine.play_turn(
+                user_input=sentence,
+                parsed=parsed,
+                gap_field=gap_field,
+                gap_object=gap_object,
+                related_objects=related_objects,
+                base_response=confirmation,
+                answer_result=answer_result
+            )
+            
+            # Set learning state if there's a question in the response
+            if gap_field and gap_object and '?' in game_result['response']:
+                self.waiting_for_answer = True
+                self.current_question_object = gap_object
+                self.current_question_field = gap_field
+            
+            response_type = 'answered' if sentence_type == 'question' else 'learned'
+            if '?' in game_result['response']:
+                response_type += '_and_asking'
+            
+            return {
+                'type': response_type,
+                'parsed': parsed,
+                'relations': relations,
+                'sentence_type': sentence_type,
+                'message': game_result['response'],
+                'objects_updated': len(updated_objects),
+                'game_score': game_result.get('score', 0),
+                'game_type': game_result.get('selected_type', 'unknown'),
+                'sentiment': game_result.get('sentiment', {})
+            }
         
-        # Now enter inquiry mode - find a gap to ask about
+        # Fallback (no game engine): handle questions and statements separately
+        if sentence_type == 'question' and answer_result:
+            # Use the answer from QuestionAnswerer
+            answer_text = answer_result.get('answer', "I don't know about that yet.")
+            follow_up = self.answerer.generate_follow_up(answer_result, parsed)
+            
+            message = answer_text
+            if follow_up:
+                message += " " + follow_up
+            
+            return {
+                'type': 'answered',
+                'parsed': parsed,
+                'sentence_type': 'question',
+                'message': message,
+                'answered': answer_result.get('answered', False),
+                'confidence': answer_result.get('confidence', 0)
+            }
+        
+        # For statements, use original inquiry mode
         question_result = self._enter_inquiry_mode(updated_objects)
         
         response = {
             'type': 'learned',
             'parsed': parsed,
             'relations': relations,
-            'message': confirmation,
+            'sentence_type': 'statement',
+            'message': confirmation or "I'm listening.",
             'objects_updated': len(updated_objects)
         }
         
@@ -233,7 +362,9 @@ class Beari2:
             value = parsed['object']
         elif len(parsed['tokens']) > 0:
             # Use the first non-stop word
-            value = parsed['tokens'][0]
+            non_stop_tokens = [t for t in parsed['tokens'] if t not in self.parser.stop_words]
+            if non_stop_tokens:
+                value = non_stop_tokens[0]
         
         if not value:
             return {
@@ -280,8 +411,37 @@ class Beari2:
             'message': message
         }
     
+    def _show_game_score(self) -> Dict:
+        """Show game engine statistics."""
+        if not self.game_engine:
+            return {
+                'type': 'info',
+                'message': "Game Engine is not enabled."
+            }
+        
+        stats = self.game_engine.get_game_stats()
+        
+        message = (
+            f"\n🎮 Game Engine Stats:\n"
+            f"   Total Score: {stats['total_score']:.1f}\n"
+            f"   Turns Played: {stats['turn_count']}\n"
+            f"   Average Score: {stats['average_score']:.2f}\n"
+        )
+        
+        if stats['history']:
+            message += "\n   Recent moves:\n"
+            for turn in stats['history'][-5:]:
+                message += f"     Turn {turn['turn']}: {turn['type']} (+{turn['score']:.1f})\n"
+        
+        return {
+            'type': 'game_stats',
+            'stats': stats,
+            'message': message
+        }
+    
     def _show_help(self) -> Dict:
         """Show help message."""
+        game_status = "enabled 🎮" if self.use_game_engine else "disabled"
         message = (
             "\n📚 Beari2 Help:\n\n"
             "How to use:\n"
@@ -289,8 +449,15 @@ class Beari2:
             "  • I'll create Living Objects that grow with properties\n"
             "  • I'll ask you questions about what I don't know\n"
             "  • Watch the database viewer to see objects grow in real-time!\n\n"
+            f"Game Engine: {game_status}\n"
+            "  The game engine optimizes responses based on:\n"
+            "  - User Happiness (empathy matching)\n"
+            "  - Knowledge Gain (filling gaps)\n"
+            "  - Conversation Flow (keeping chat going)\n\n"
             "Commands:\n"
             "  stats  - Show knowledge statistics\n"
+            "  score  - Show game engine score\n"
+            "  ?      - Ask me to generate a question\n"
             "  help   - Show this message\n"
             "  quit   - Exit\n"
         )
@@ -301,6 +468,8 @@ class Beari2:
         """Run interactive chat loop."""
         print("="*70)
         print("🐻 Welcome to Beari2 - Object-Oriented Learning AI")
+        if self.use_game_engine:
+            print("🎮 Game Engine: ENABLED (optimized responses)")
         print("="*70)
         print("\nI learn by creating 'Living Objects' that grow with properties.")
         print("Tell me about things, and watch the database viewer to see them grow!")
@@ -309,7 +478,7 @@ class Beari2:
         
         while True:
             try:
-                user_input = input("\n🧑 You: ").strip()
+                user_input = input("\nYou: ").strip()
                 
                 if not user_input:
                     continue
@@ -329,6 +498,10 @@ class Beari2:
                 # Display question if any
                 if result.get('question'):
                     print(f"\n🐻 Beari: {result['question']}")
+
+                # Display pass message if any
+                if result['type'] == 'pass':
+                    print(f"\n🐻 Beari: {result['message']}")
                 
             except KeyboardInterrupt:
                 print("\n\n🐻 Beari: Goodbye!")

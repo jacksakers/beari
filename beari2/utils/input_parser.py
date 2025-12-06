@@ -1,6 +1,7 @@
 """
 Input Parser for Beari2.
 Parses user sentences to extract subjects, predicates, and objects.
+Also detects sentence types (question, statement, command).
 """
 
 import re
@@ -16,7 +17,41 @@ class InputParser:
     - Verb (the action)
     - Object (the receiver)
     - Adjectives (descriptors)
+    - Sentence type (question, statement, command)
     """
+    
+    # Question words for detection
+    QUESTION_WORDS = {
+        'what', 'who', 'where', 'when', 'why', 'how', 
+        'which', 'whose', 'whom', 'is', 'are', 'was', 
+        'were', 'do', 'does', 'did', 'can', 'could', 
+        'will', 'would', 'should', 'have', 'has', 'had'
+    }
+    
+    # Question types based on question word
+    QUESTION_TYPE_MAP = {
+        'what': 'definition',      # "What is X?" -> asking for definition/identity
+        'who': 'identity',         # "Who is X?" -> asking about identity
+        'where': 'location',       # "Where is X?" -> asking about location
+        'when': 'time',            # "When is X?" -> asking about time
+        'why': 'reason',           # "Why is X?" -> asking for reason
+        'how': 'manner',           # "How is X?" or "How does X?" -> asking about manner
+        'which': 'selection',      # "Which X?" -> asking for selection
+        'is': 'confirmation',      # "Is X Y?" -> yes/no confirmation
+        'are': 'confirmation',
+        'was': 'confirmation',
+        'were': 'confirmation',
+        'do': 'confirmation',
+        'does': 'confirmation',
+        'did': 'confirmation',
+        'can': 'ability',          # "Can X do Y?" -> asking about ability
+        'could': 'ability',
+        'will': 'future',
+        'would': 'hypothetical',
+        'should': 'recommendation',
+        'have': 'possession',
+        'has': 'possession',
+    }
     
     def __init__(self):
         """Initialize the parser."""
@@ -54,6 +89,71 @@ class InputParser:
         text = re.sub(r'[^\w\s\']', '', text)
         return [t.lower() for t in text.split() if t]
     
+    def detect_sentence_type(self, sentence: str) -> Dict:
+        """
+        Detect whether the sentence is a question, statement, or command.
+        
+        Args:
+            sentence: Input sentence
+            
+        Returns:
+            Dictionary with sentence_type, question_type, and question_target
+        """
+        sentence = sentence.strip()
+        tokens = self.tokenize(sentence)
+        
+        result = {
+            'sentence_type': 'statement',  # Default
+            'question_type': None,
+            'question_word': None,
+            'question_target': None,  # What the question is about
+        }
+        
+        # Check for question mark (strongest indicator)
+        if sentence.endswith('?'):
+            result['sentence_type'] = 'question'
+        
+        # Check if starts with question word
+        if tokens:
+            first_word = tokens[0]
+            if first_word in self.QUESTION_WORDS:
+                result['sentence_type'] = 'question'
+                result['question_word'] = first_word
+                result['question_type'] = self.QUESTION_TYPE_MAP.get(first_word, 'general')
+                
+                # Extract what the question is about
+                result['question_target'] = self._extract_question_target(tokens, first_word)
+        
+        # Check for command patterns (imperative)
+        command_starters = {'tell', 'show', 'give', 'explain', 'describe', 'list'}
+        if tokens and tokens[0] in command_starters:
+            result['sentence_type'] = 'command'
+        
+        return result
+    
+    def _extract_question_target(self, tokens: List[str], question_word: str) -> Optional[str]:
+        """
+        Extract the target/subject of a question.
+        
+        For "What is a dog?" -> returns "dog"
+        For "Who can fly?" -> returns None (asking about who)
+        
+        Args:
+            tokens: List of word tokens
+            question_word: The question word used
+            
+        Returns:
+            The target word/concept being asked about
+        """
+        # Skip question word and find the main subject
+        meaningful_tokens = [t for t in tokens[1:] if t not in self.stop_words 
+                           and t not in self.relation_verbs]
+        
+        if meaningful_tokens:
+            return meaningful_tokens[0]
+        
+        return None
+    
     def parse_sentence(self, sentence: str) -> Dict:
         """
         Parse a sentence into components.
@@ -66,6 +166,9 @@ class InputParser:
         """
         tokens = self.tokenize(sentence)
         
+        # Detect sentence type first
+        sentence_info = self.detect_sentence_type(sentence)
+        
         # Find verb position
         verb_idx, verb = self._find_verb(tokens)
         
@@ -77,7 +180,12 @@ class InputParser:
             'verb_relation': None,
             'object': None,
             'adjectives': [],
-            'structure': 'unknown'
+            'structure': 'unknown',
+            # Sentence type information
+            'sentence_type': sentence_info['sentence_type'],
+            'question_type': sentence_info.get('question_type'),
+            'question_word': sentence_info.get('question_word'),
+            'question_target': sentence_info.get('question_target'),
         }
         
         if verb_idx is not None:
