@@ -55,6 +55,7 @@ class QuestionAnswerer:
     # Relation to natural language mapping
     RELATION_PHRASES = {
         'is': 'is',
+        'are': 'are',
         'can_do': 'can',
         'can_have': 'can have',
         'can_be': 'can be',
@@ -217,14 +218,14 @@ class QuestionAnswerer:
         if not obj:
             return self._unknown_answer(word or parsed.get('subject', 'that'))
         
-        # Look for 'feels_like' or descriptive properties
-        feels_values = obj.get_property('feels_like')
+        # Look for 'is' or descriptive properties
+        feels_values = obj.get_property('is')
         
         if feels_values:
             template = random.choice(self.ANSWER_TEMPLATES['property'])
             answer = template.format(
                 word=obj.word,
-                relation='feels',
+                relation='is',
                 value=feels_values[0]
             )
             
@@ -232,7 +233,7 @@ class QuestionAnswerer:
                 'answered': True,
                 'answer': answer,
                 'object': obj.word,
-                'property': 'feels_like',
+                'property': 'is',
                 'values': feels_values,
                 'confidence': 0.85,
             }

@@ -34,7 +34,7 @@ class Beari2:
     - Confirms learning through natural responses
     """
     
-    def __init__(self, db_path: str = "beari2.db", use_game_engine: bool = True, debug: bool = False):
+    def __init__(self, db_path: str = "beari2.db", use_game_engine: bool = True, debug: bool = True):
         """
         Initialize Beari2.
         
@@ -147,6 +147,13 @@ class Beari2:
         # if user enters ? then generate a question about a random object
         if user_input.strip() == '?':
             all_objects = self.manager.get_all()
+            # pick a random object
+            if not all_objects:
+                return {
+                    'type': 'no_question',
+                    'message': "I don't have any objects to ask about yet. Teach me something new!"
+                }
+            random.shuffle(all_objects)
             for obj in all_objects:
                 field = suggest_next_question_field(obj)
                 if field:
@@ -171,12 +178,12 @@ class Beari2:
         
         # If waiting for answer to a property question
         if self.waiting_for_answer and self.current_question_object:
-            # if the user input is empty, treat it as a pass and do not process
-            if not user_input:
+            # if the user enters "pass", treat it as a pass and do not process
+            if user_input.lower() == "pass":
                 self.waiting_for_answer = False
                 self.current_question_object = None
                 self.current_question_field = None
-                return {'type': 'pass', 'message': 'No answer provided. Moving on.'}
+                return {'type': 'pass', 'message': 'Passing on that question. Moving on.'}
             return self._process_learning_answer(user_input)
         
         # Otherwise, parse and learn from the input
@@ -260,6 +267,7 @@ class Beari2:
         sentence_type = parsed.get('sentence_type', 'statement')
         
         self.debug.log(f"Sentence type: {sentence_type}", "PROCESSING")
+        self.debug.log_parse(f"Parsed data: {parsed}")
         
         # Handle greeting if present
         greeting_response = ""
@@ -293,8 +301,10 @@ class Beari2:
                     'pending': len(self.pending_pos_questions)
                 }
         
-        # Extract relations (for statements, learn from them)
-        relations = self.parser.extract_relations(parsed)
+        # Extract relations if the sentence is a statement
+        relations = []
+        if sentence_type == 'statement':
+            relations = self.parser.extract_relations(parsed)
         
         self.debug.log(f"Extracted {len(relations)} relations", "PROCESSING")
         
@@ -422,7 +432,7 @@ class Beari2:
         if sentence_type == 'question' and answer_result:
             # Add the answer
             answer_text = answer_result.get('answer', "I don't know about that yet.")
-            message_parts.append(answer_text)
+            message_parts.append(self.convert_pronouns(answer_text))
         elif confirmation:
             # Add confirmation for statements
             message_parts.append(confirmation)

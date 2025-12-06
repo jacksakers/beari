@@ -260,8 +260,8 @@ class InputParser:
         # Remove punctuation except apostrophes
         text = re.sub(r'[^\w\s\']', '', text)
         return [t.lower() for t in text.split() if t]
-    
-    def detect_sentence_type(self, sentence: str) -> Dict:
+
+    def detect_sentence_type(self, sentence: str, subjects: List[str], verb: Optional[str]) -> Dict:
         """
         Detect whether the sentence is a question, statement, or command.
         
@@ -288,19 +288,27 @@ class InputParser:
         # Check if starts with question word
         if tokens:
             first_word = tokens[0]
+            # if first_word is a stop word or greeting word, skip it
+            if first_word in self.stop_words or first_word in self.greetings:
+                if len(tokens) > 1:
+                    first_word = tokens[1]
+                else:
+                    first_word = ''
+            self.debug.log_parse(f"Checking first word for question detection: '{first_word}'")
             if first_word in self.QUESTION_WORDS:
                 result['sentence_type'] = 'question'
                 result['question_word'] = first_word
                 result['question_type'] = self.QUESTION_TYPE_MAP.get(first_word, 'general')
                 
-                # Extract what the question is about
-                result['question_target'] = self._extract_question_target(tokens, first_word)
+                # Extract what the question is about from the subjects
+                result['question_target'] = subjects[0] if subjects else self._extract_question_target(tokens, first_word)
         
         # Check for command patterns (imperative)
         command_starters = {'tell', 'show', 'give', 'explain', 'describe', 'list'}
         if tokens and tokens[0] in command_starters:
             result['sentence_type'] = 'command'
         
+        # self.debug.log_parse(f"Detected sentence type: {result['sentence_type']}, question_type: {result['question_type']}, question_target: {result['question_target']}")
         return result
     
     def _extract_question_target(self, tokens: List[str], question_word: str) -> Optional[str]:
@@ -317,6 +325,7 @@ class InputParser:
         Returns:
             The target word/concept being asked about
         """
+        self.debug.log_parse(f"Extracting question target from tokens: {tokens} with question word '{question_word}'")
         # Skip question word and find the main subject
         meaningful_tokens = [t for t in tokens[1:] if t not in self.stop_words 
                            and t not in self.relation_verbs]
@@ -343,10 +352,6 @@ class InputParser:
         
         tokens = self.tokenize(sentence)
         self.debug.log_parse(f"Tokens: {tokens}")
-        
-        # Detect sentence type first
-        sentence_info = self.detect_sentence_type(sentence)
-        self.debug.log_parse(f"Sentence type: {sentence_info['sentence_type']}")
         
         # Find verb position
         verb_idx, verb = self._find_verb(tokens)
@@ -412,6 +417,11 @@ class InputParser:
                     self.debug.log_parse(f"'{token}' is unknown - POS needs to be determined")
             
             self.debug.dedent()
+
+        # Detect sentence type after finding subjects and verbs
+        sentence_info = self.detect_sentence_type(sentence, subjects, verb)
+        self.debug.log_parse(f"Sentence type: {sentence_info['sentence_type']}")
+        
         
         result = {
             'original': sentence,
