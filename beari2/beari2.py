@@ -69,6 +69,42 @@ class Beari2:
         set_debug_mode(debug)
         self.debug = get_debug_logger()
     
+    @staticmethod
+    def convert_pronouns(text: str) -> str:
+        """
+        Convert pronouns for AI response (user perspective to AI perspective).
+        - "I" -> "you"
+        - "you" or "beari" -> "I"
+        - "my" -> "your"
+        - "your" -> "my"
+        
+        Args:
+            text: Text to convert
+        
+        Returns:
+            Text with pronouns converted
+        """
+        words = text.split()
+        converted = []
+        
+        for word in words:
+            word_lower = word.lower()
+            
+            # Handle pronouns
+            if word_lower == 'i':
+                converted.append('you')
+            elif word_lower in ['you', 'beari']:
+                converted.append('I')
+            # Handle possessives
+            elif word_lower == 'my':
+                converted.append('your')
+            elif word_lower == 'your':
+                converted.append('my')
+            else:
+                converted.append(word)
+        
+        return ' '.join(converted)
+    
     def process_input(self, user_input: str) -> Dict:
         """
         Main input processing pipeline.
@@ -394,6 +430,8 @@ class Beari2:
         # Add inquiry if we found a gap
         if gap_field and gap_object:
             question = generate_question(gap_object.word, gap_field, gap_object.pos)
+            # Apply pronoun conversion to the question
+            question = self.convert_pronouns(question)
             message_parts.append(question)
             
             # Set waiting state
@@ -444,20 +482,9 @@ class Beari2:
         # Generate confirmation based on first relation with converted pronouns
         rel = relations[0]
         
-        # Convert source and target for response
-        source = rel['source']
-        target = rel['target']
-        
-        # Convert "I" to "you" for the response
-        if source.lower() == 'i':
-            source = 'you'
-        elif source.lower() in ['you', 'beari']:
-            source = 'I'
-        
-        if target.lower() == 'i':
-            target = 'you'
-        elif target.lower() in ['you', 'beari']:
-            target = 'I'
+        # Convert source and target for response using the pronoun conversion function
+        source = self.convert_pronouns(rel['source'])
+        target = self.convert_pronouns(rel['target'])
         
         # Generate confirmation based on relation type
         if rel['relation'] == 'is' or rel['relation'].startswith('is_'):
@@ -477,14 +504,7 @@ class Beari2:
             if source.lower() == 'i':
                 verb = 'am enjoying'
             
-            # Convert possessives in target
-            target_converted = target
-            if 'my ' in target:
-                target_converted = target.replace('my ', 'your ')
-            elif 'your ' in target:
-                target_converted = target.replace('your ', 'my ')
-            
-            return f"Understood, {source} {verb} {target_converted}."
+            return f"Understood, {source} {verb} {target}."
         else:
             return f"I learned about {source}."
     

@@ -406,7 +406,8 @@ class InputParser:
                 self.debug.log_parse(f"'{token}' detected as Verb")
             elif pos is None and token not in self.relation_verbs:
                 # Unknown word
-                if token not in ['i', 'you', 'me', 'we', 'us', 'beari']:  # Skip pronouns
+                # Skip pronouns and question words
+                if token not in ['i', 'you', 'me', 'we', 'us', 'beari'] and token not in self.QUESTION_WORDS:
                     unknown_words.append(token)
                     self.debug.log_parse(f"'{token}' is unknown - POS needs to be determined")
             
