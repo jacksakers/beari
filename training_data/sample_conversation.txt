@@ -1,0 +1,158 @@
+User: Hello, how are you Beari?
+
+Input Analysis Breakdown:
+1. Goes through each word. 
+2. Hello 
+- detects as a greeting, add to response: "Hello!"
+3. how
+- detects as a question word. 
+- starts question analysis on the next words
+    - are 
+        - detects as relating to "is" relation
+    - you
+        - searches you object for is, if there add it to potential responses
+    - Beari
+        - also searches Beari object for is, if there add to potential responses
+- picks a random response to add to its response string
+4. ? 
+- knows it is a question that needs a response
+5. converts "you" and "Beari" to "I"
+6. converts "is" to "am" because it is after "I"
+
+7. Response generation 
+- add elaboration or question randomly
+    - elaboration
+        - query "Beari" or "you" objects for other relations
+        - ex: "I am also an AI."
+    - question
+        - ask about user
+        - ask about other topic from topic list 
+            - Topic List: "weather, life, family, friends" 
+            - small talk topics, also can be added to
+        - ask more about subject 
+
+Beari2: Hello! I am doing well! How are you?
+
+
+User: I am well! I am enjoying my cold Saturday morning.
+
+Input ANALYSIS BREAKDOWN:
+1. I 
+    - detects "I" as the subject of conversation and first sentence object.
+    - Adds to subject object (which can change)
+2. am 
+    - maps "am" to the "is" property.
+3. well
+    - sets the I object's "is" to be "well".
+    - creates well object because it doesn't exist
+    - adds "well" to potential subjects of conversation
+        - if something has been in subject object for too long, it gets removed 
+4. !
+    - detects as added enthusiasm
+    - end of sentence
+5. I 
+    - begins new sentence analysis on next sentence. 
+    - detects I as the subject of that Sentence
+6. am 
+    - maps to "is"
+    - creates new "is_2" key because "is" exists
+        - is_x keys will also be searched when any "is" is queried to be potential responses
+    - starts to listen for next words to set "is" to
+7. enjoying
+    - removes the tense "ing" and finds "enjoy" in the verbs.txt
+    - detects enjoying as a new property because "enjoy" is a verb
+    - adds it as a property to the I object
+    - begins to add next words to the enjoying property of the I object
+    - detects as positive word, more positive points for the game engine!
+8. my 
+    -detected as a possesive word, added to property
+9. cold 
+    - detected as adjective from cold in adjectives.txt
+    - adds to adjective list of the sentence
+    - adding next words to cold object's property can_describe
+10. Saturday
+    - creates saturday object because it is unkown word with unknown pos
+    - adds "what part of speech is the word Saturday?" to response questions
+11. morning
+    - detected as noun in nouns.txt
+    - creates morning noun object with empty noun fields that could be asked about
+    - adds cold to "is" property from adjective list
+    - adds to subjects property because it is a noun
+12. .
+    - detects as end of statement
+
+So the objects that were edited and created would look like this:
+
+subjects of first input sentence: {
+    "I", "well"
+}
+
+subjects of second input sentence: {
+    "I", "morning"
+}
+
+adjectives of second sentence {
+    "cold"
+}
+
+I: { 
+    is: "well",
+    is_2: "enjoying my cold Saturday morning"
+    enjoying: "my cold Saturday morning"
+}
+
+well: {
+    is: "",
+}
+
+cold: {
+    type: "adjective",
+    can_describe: "Saturday morning"
+}
+
+morning: {
+    type: "noun",
+    is: "cold",
+    can_do: "",
+
+}
+
+RESPONSE Construction: 
+1. ask any questions that were generated first and go into answer mode to recieve answers
+    - there should also be a way to pass on a question
+2. get answers to questions (confirm answers then continue response)
+3. Give response to first sentence
+    - tell what Beari learned
+    - convert "I" to you
+    - convert "is" to "are"
+4. Give response to second sentence
+    - convert "my" to your
+5. Ask question
+    - choose one of subjects randomly
+    - morning
+        - find a random empty common field of noun
+        - finds feels_like
+
+
+
+Beari2: What part of speech is Saturday?
+
+User: a noun
+
+Input ANALYSIS
+1. save type of saturday object as "noun"
+
+CONTINUATION OF RESPONSE
+
+Bear12: Thank you, I now know that Saturday is a noun!
+        I see, you are well. 
+        Understood, you are enjoying your cold saturday morning! 
+        What does morning feel like?
+
+User: Morning feels renewing and refreshing.
+
+INPUT ANALYSIS
+Beari would learn that mornings feels_like: "renewing", and "refreshing" could use feels_like_2
+And so on and so on. 
+
+The conversation should continue.

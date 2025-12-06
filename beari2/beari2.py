@@ -5,7 +5,8 @@ Main conversation interface with Living Objects.
 
 import sys
 import os
-from typing import Dict, Optional
+import random
+from typing import Dict, Optional, List
 
 # Add parent directory to path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -17,6 +18,7 @@ from core.question_generator import generate_question, generate_confirmation
 from core.game_engine import GameEngine
 from core.question_answerer import QuestionAnswerer
 from utils.input_parser import InputParser
+from utils.debug_logger import get_debug_logger, set_debug_mode
 from db import initialize_database, get_object_count, DatabaseConnection
 
 
@@ -32,13 +34,14 @@ class Beari2:
     - Confirms learning through natural responses
     """
     
-    def __init__(self, db_path: str = "beari2.db", use_game_engine: bool = True):
+    def __init__(self, db_path: str = "beari2.db", use_game_engine: bool = True, debug: bool = False):
         """
         Initialize Beari2.
         
         Args:
             db_path: Path to database file
             use_game_engine: Enable the conversation game engine for optimized responses
+            debug: Enable debug logging
         """
         self.db_path = db_path
         self.manager = ObjectManager(db_path)
@@ -55,6 +58,16 @@ class Beari2:
         self.waiting_for_answer = False
         self.current_question_object = None
         self.current_question_field = None
+        self.pending_pos_questions = []  # Queue of unknown words needing POS clarification
+        self.waiting_for_pos_answer = False
+        self.current_pos_word = None
+        
+        # Subject tracking (for conversation continuity)
+        self.conversation_subjects = []
+        
+        # Debug mode
+        set_debug_mode(debug)
+        self.debug = get_debug_logger()
     
     def process_input(self, user_input: str) -> Dict:
         """
@@ -67,6 +80,8 @@ class Beari2:
             Response dictionary
         """
         user_input = user_input.strip()
+        
+        self.debug.section(f"USER INPUT: '{user_input}'")
         
         if not user_input:
             return {'type': 'empty', 'message': '...'}
@@ -84,6 +99,14 @@ class Beari2:
         
         if user_input.lower() == 'help':
             return self._show_help()
+        
+        if user_input.lower() == 'debug on':
+            set_debug_mode(True)
+            return {'type': 'command', 'message': '🐛 Debug mode enabled'}
+        
+        if user_input.lower() == 'debug off':
+            set_debug_mode(False)
+            return {'type': 'command', 'message': 'Debug mode disabled'}
         
         # if user enters ? then generate a question about a random object
         if user_input.strip() == '?':
@@ -106,7 +129,11 @@ class Beari2:
                 'message': "I don't have any questions right now. Teach me something new!"
             }
         
-        # If waiting for answer to a question
+        # If waiting for POS answer
+        if self.waiting_for_pos_answer and self.current_pos_word:
+            return self._process_pos_answer(user_input)
+        
+        # If waiting for answer to a property question
         if self.waiting_for_answer and self.current_question_object:
             # if the user input is empty, treat it as a pass and do not process
             if not user_input:
@@ -119,6 +146,66 @@ class Beari2:
         # Otherwise, parse and learn from the input
         return self._process_new_sentence(user_input)
     
+    def _process_pos_answer(self, answer: str) -> Dict:
+        """
+        Process user's answer to a part-of-speech question.
+        
+        Args:
+            answer: User's answer
+        
+        Returns:
+            Response dictionary
+        """
+        self.debug.log_learn(f"Processing POS answer: '{answer}' for word '{self.current_pos_word}'")
+        
+        answer_lower = answer.lower().strip()
+        
+        # Parse the answer
+        pos_type = None
+        if 'noun' in answer_lower:
+            pos_type = 'Noun'
+        elif 'verb' in answer_lower:
+            pos_type = 'Verb'
+        elif 'adjective' in answer_lower or 'adj' in answer_lower:
+            pos_type = 'Adjective'
+        
+        if pos_type:
+            # Create or update the object with the correct POS
+            obj = self.manager.create_or_get(self.current_pos_word, pos_type)
+            self.manager.save_object(obj)
+            
+            self.debug.log_learn(f"Saved '{self.current_pos_word}' as {pos_type}")
+            
+            # Reset state
+            word = self.current_pos_word
+            self.waiting_for_pos_answer = False
+            self.current_pos_word = None
+            
+            # Check if there are more POS questions
+            if self.pending_pos_questions:
+                next_word = self.pending_pos_questions.pop(0)
+                self.current_pos_word = next_word
+                self.waiting_for_pos_answer = True
+                
+                return {
+                    'type': 'pos_answered_asking_next',
+                    'message': f"Thank you, I now know that {word} is a {pos_type.lower()}!\nWhat part of speech is {next_word}?",
+                    'word': next_word
+                }
+            else:
+                return {
+                    'type': 'pos_answered',
+                    'message': f"Thank you, I now know that {word} is a {pos_type.lower()}!",
+                    'word': word,
+                    'pos': pos_type
+                }
+        else:
+            return {
+                'type': 'pos_unclear',
+                'message': "I'm not sure what you mean. Is it a noun, verb, or adjective?",
+                'word': self.current_pos_word
+            }
+    
     def _process_new_sentence(self, sentence: str) -> Dict:
         """
         Process a new sentence: parse, create objects, update properties.
@@ -130,17 +217,50 @@ class Beari2:
         Returns:
             Response dictionary
         """
+        self.debug.log("Processing new sentence", "PROCESSING")
+        
         # Parse the sentence
         parsed = self.parser.parse_sentence(sentence)
         sentence_type = parsed.get('sentence_type', 'statement')
         
+        self.debug.log(f"Sentence type: {sentence_type}", "PROCESSING")
+        
+        # Handle greeting if present
+        greeting_response = ""
+        if parsed.get('greeting'):
+            greeting = parsed['greeting'].capitalize()
+            greeting_response = f"{greeting}! "
+            self.debug.log_response(f"Adding greeting response: '{greeting}!'")
+        
         # If user asked a question, try to answer it first
         answer_result = None
         if sentence_type == 'question':
+            self.debug.log("Attempting to answer question", "PROCESSING")
             answer_result = self.answerer.answer_question(parsed)
+        
+        # Handle unknown words - ask about POS first
+        if parsed.get('unknown_words') and sentence_type == 'statement':
+            self.debug.log(f"Unknown words found: {parsed['unknown_words']}", "PROCESSING")
+            self.pending_pos_questions = parsed['unknown_words'].copy()
+            
+            if self.pending_pos_questions:
+                first_unknown = self.pending_pos_questions.pop(0)
+                self.current_pos_word = first_unknown
+                self.waiting_for_pos_answer = True
+                
+                self.debug.log(f"Asking POS question for: '{first_unknown}'", "PROCESSING")
+                
+                return {
+                    'type': 'asking_pos',
+                    'message': f"{greeting_response}What part of speech is {first_unknown}?",
+                    'word': first_unknown,
+                    'pending': len(self.pending_pos_questions)
+                }
         
         # Extract relations (for statements, learn from them)
         relations = self.parser.extract_relations(parsed)
+        
+        self.debug.log(f"Extracted {len(relations)} relations", "PROCESSING")
         
         # Update or create objects for each component
         updated_objects = []
@@ -148,25 +268,76 @@ class Beari2:
         # Only create/update objects if it's a statement (learning)
         # For questions, we just look up existing objects
         if sentence_type == 'statement':
+            self.debug.log("Creating/updating objects from statement", "LEARN")
+            self.debug.indent()
+            
+            # Track subjects for conversation
+            if parsed.get('subjects'):
+                for subject in parsed['subjects']:
+                    if subject not in self.conversation_subjects:
+                        self.conversation_subjects.append(subject)
+                    # Keep only recent subjects (max 5)
+                    if len(self.conversation_subjects) > 5:
+                        self.conversation_subjects.pop(0)
+            
             if parsed['subject']:
                 obj = self.manager.create_or_get(parsed['subject'], 'Noun')
                 updated_objects.append(obj)
+                self.debug.log_learn(f"Created/loaded subject object: '{parsed['subject']}'")
             
             if parsed['object']:
                 # Infer POS from context
                 pos = 'Adjective' if parsed['verb_relation'] == 'is' else 'Noun'
                 obj = self.manager.create_or_get(parsed['object'], pos)
                 updated_objects.append(obj)
+                self.debug.log_learn(f"Created/loaded object: '{parsed['object']}' as {pos}")
             
             if parsed['verb'] and parsed['verb'] not in self.parser.relation_verbs:
                 obj = self.manager.create_or_get(parsed['verb'], 'Verb')
                 updated_objects.append(obj)
+                self.debug.log_learn(f"Created/loaded verb object: '{parsed['verb']}'")
+            
+            # Create objects for all parsed subjects and adjectives
+            for subject in parsed.get('subjects', []):
+                if subject and subject != parsed.get('subject'):
+                    obj = self.manager.create_or_get(subject, 'Noun')
+                    if obj not in updated_objects:
+                        updated_objects.append(obj)
+                        self.debug.log_learn(f"Created/loaded additional subject: '{subject}'")
+            
+            for adj in parsed.get('adjectives', []):
+                obj = self.manager.create_or_get(adj, 'Adjective')
+                if obj not in updated_objects:
+                    updated_objects.append(obj)
+                    self.debug.log_learn(f"Created/loaded adjective: '{adj}'")
             
             # Apply relations
+            self.debug.log(f"Applying {len(relations)} relations to objects", "LEARN")
             for relation in relations:
-                source_obj = self.manager.create_or_get(relation['source'], 'Noun')
-                source_obj.add_property(relation['relation'], relation['target'])
+                # Determine POS for source
+                source_pos = 'Noun'
+                if relation['source'] in parsed.get('adjectives', []):
+                    source_pos = 'Adjective'
+                elif relation['source'] == parsed.get('verb'):
+                    source_pos = 'Verb'
+                
+                source_obj = self.manager.create_or_get(relation['source'], source_pos)
+                
+                # Handle property keys with numbering (is, is_2, is_3, etc.)
+                base_relation = relation['relation']
+                property_key = base_relation
+                
+                # Check if base_relation already exists in properties dict
+                if base_relation in source_obj.properties and source_obj.properties[base_relation]:
+                    # Count how many numbered versions exist
+                    existing_numbered = [k for k in source_obj.properties.keys() if k.startswith(base_relation + '_')]
+                    property_key = f"{base_relation}_{len(existing_numbered) + 1}"
+                    self.debug.log_learn(f"Property '{base_relation}' exists, using '{property_key}'")
+                
+                source_obj.add_property(property_key, relation['target'])
                 self.manager.save_object(source_obj)
+                
+                self.debug.log_db(f"Saved: {source_obj.word}.{property_key} = {relation['target']}")
                 
                 # Update the object in updated_objects if it exists there
                 for i, obj in enumerate(updated_objects):
@@ -180,6 +351,8 @@ class Beari2:
             # Save all updated objects
             for obj in updated_objects:
                 self.manager.save_object(obj)
+            
+            self.debug.dedent()
         else:
             # For questions, just load the relevant objects for context
             if parsed.get('question_target'):
@@ -204,85 +377,57 @@ class Beari2:
                 gap_object = obj
                 break
         
-        # Use Game Engine if enabled
-        if self.use_game_engine and self.game_engine:
-            # Get related objects for connector responses
-            related_objects = [o for o in updated_objects if o != gap_object][:3]
-            
-            # Play a game turn with answer_result for questions
-            game_result = self.game_engine.play_turn(
-                user_input=sentence,
-                parsed=parsed,
-                gap_field=gap_field,
-                gap_object=gap_object,
-                related_objects=related_objects,
-                base_response=confirmation,
-                answer_result=answer_result
-            )
-            
-            # Set learning state if there's a question in the response
-            if gap_field and gap_object and '?' in game_result['response']:
-                self.waiting_for_answer = True
-                self.current_question_object = gap_object
-                self.current_question_field = gap_field
-            
-            response_type = 'answered' if sentence_type == 'question' else 'learned'
-            if '?' in game_result['response']:
-                response_type += '_and_asking'
-            
-            return {
-                'type': response_type,
-                'parsed': parsed,
-                'relations': relations,
-                'sentence_type': sentence_type,
-                'message': game_result['response'],
-                'objects_updated': len(updated_objects),
-                'game_score': game_result.get('score', 0),
-                'game_type': game_result.get('selected_type', 'unknown'),
-                'sentiment': game_result.get('sentiment', {})
-            }
+        # Build response message
+        message_parts = []
         
-        # Fallback (no game engine): handle questions and statements separately
+        if greeting_response:
+            message_parts.append(greeting_response.strip())
+        
         if sentence_type == 'question' and answer_result:
-            # Use the answer from QuestionAnswerer
+            # Add the answer
             answer_text = answer_result.get('answer', "I don't know about that yet.")
-            follow_up = self.answerer.generate_follow_up(answer_result, parsed)
-            
-            message = answer_text
-            if follow_up:
-                message += " " + follow_up
-            
-            return {
-                'type': 'answered',
-                'parsed': parsed,
-                'sentence_type': 'question',
-                'message': message,
-                'answered': answer_result.get('answered', False),
-                'confidence': answer_result.get('confidence', 0)
-            }
+            message_parts.append(answer_text)
+        elif confirmation:
+            # Add confirmation for statements
+            message_parts.append(confirmation)
         
-        # For statements, use original inquiry mode
-        question_result = self._enter_inquiry_mode(updated_objects)
+        # Add inquiry if we found a gap
+        if gap_field and gap_object:
+            question = generate_question(gap_object.word, gap_field, gap_object.pos)
+            message_parts.append(question)
+            
+            # Set waiting state
+            self.waiting_for_answer = True
+            self.current_question_object = gap_object
+            self.current_question_field = gap_field
+            
+            self.debug.log_response(f"Generated gap question: '{question}'")
         
-        response = {
-            'type': 'learned',
+        final_message = " ".join(message_parts) if message_parts else "I'm listening."
+        
+        # Determine response type
+        if greeting_response and sentence_type == 'question':
+            response_type = 'greeting'
+        else:
+            response_type = 'answered' if sentence_type == 'question' else 'learned'
+        
+        if gap_field and gap_object:
+            response_type += '_and_asking'
+        
+        return {
+            'type': response_type,
             'parsed': parsed,
             'relations': relations,
-            'sentence_type': 'statement',
-            'message': confirmation or "I'm listening.",
-            'objects_updated': len(updated_objects)
+            'sentence_type': sentence_type,
+            'message': final_message,
+            'objects_updated': len(updated_objects),
+            'updated_objects': [{'word': obj.word, 'pos': obj.pos} for obj in updated_objects]
         }
-        
-        # Add question if found
-        if question_result:
-            response['question'] = question_result['question']
-            response['type'] = 'learned_and_asking'
-        
-        return response
     
     def _generate_confirmation(self, parsed: Dict, relations: list) -> str:
         """
         Generate a natural confirmation of what was learned.
+        Uses pronoun conversion to mirror back the user's statement properly.
         
         Args:
             parsed: Parsed sentence
@@ -294,19 +439,54 @@ class Beari2:
         if not relations:
             return "I'm listening and learning from what you say."
         
-        # Generate confirmation based on first relation
+        self.debug.log_response("Generating confirmation with pronoun conversion")
+        
+        # Generate confirmation based on first relation with converted pronouns
         rel = relations[0]
         
-        if rel['relation'] == 'is':
-            return f"I see, {rel['source']} is {rel['target']}."
-        elif rel['relation'] == 'can_have':
-            return f"Got it, {rel['source']} can have {rel['target']}."
-        elif rel['relation'] == 'can_do':
-            return f"I understand, {rel['source']} can {rel['target']}."
-        elif rel['relation'] == 'feels_like':
-            return f"I see, {rel['source']} feels like {rel['target']}."
+        # Convert source and target for response
+        source = rel['source']
+        target = rel['target']
+        
+        # Convert "I" to "you" for the response
+        if source.lower() == 'i':
+            source = 'you'
+        elif source.lower() in ['you', 'beari']:
+            source = 'I'
+        
+        if target.lower() == 'i':
+            target = 'you'
+        elif target.lower() in ['you', 'beari']:
+            target = 'I'
+        
+        # Generate confirmation based on relation type
+        if rel['relation'] == 'is' or rel['relation'].startswith('is_'):
+            # Handle verb conjugation
+            verb = 'are' if source.lower() == 'you' else 'is'
+            if source.lower() == 'i':
+                verb = 'am'
+            return f"I see, {source} {verb} {target}."
+        elif rel['relation'] == 'can_have' or rel['relation'].startswith('can_have_'):
+            return f"Got it, {source} can have {target}."
+        elif rel['relation'] == 'can_do' or rel['relation'].startswith('can_do_'):
+            return f"I understand, {source} can {target}."
+        elif rel['relation'] == 'feels_like' or rel['relation'].startswith('feels_like_'):
+            return f"I see, {source} feels like {target}."
+        elif rel['relation'].startswith('enjoy'):
+            verb = 'are enjoying' if source.lower() == 'you' else 'is enjoying'
+            if source.lower() == 'i':
+                verb = 'am enjoying'
+            
+            # Convert possessives in target
+            target_converted = target
+            if 'my ' in target:
+                target_converted = target.replace('my ', 'your ')
+            elif 'your ' in target:
+                target_converted = target.replace('your ', 'my ')
+            
+            return f"Understood, {source} {verb} {target_converted}."
         else:
-            return f"I learned about {rel['source']}."
+            return f"I learned about {source}."
     
     def _enter_inquiry_mode(self, objects: list) -> Optional[Dict]:
         """

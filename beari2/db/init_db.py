@@ -32,7 +32,7 @@ def initialize_database(db_path: str = "beari2.db") -> None:
             db.cursor.execute(statement)
         
         db.commit()
-        print("✓ Database initialized successfully")
+        print("[OK] Database initialized successfully")
 
 
 def reset_database(db_path: str = "beari2.db") -> None:
