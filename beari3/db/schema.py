@@ -40,6 +40,10 @@ class Database:
                 response_raw TEXT NOT NULL,
                 response_strategy TEXT,
                 key_words TEXT,
+                pattern_signature TEXT,
+                response_template TEXT,
+                tense TEXT,
+                sentiment_score REAL,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         """)
@@ -51,6 +55,17 @@ class Database:
                 input_pattern TEXT NOT NULL,
                 response_pattern TEXT NOT NULL,
                 usage_count INTEGER DEFAULT 0,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+        
+        # Semantic Categories - maps words to abstract categories for generalization
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS SemanticCategories (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                word TEXT UNIQUE NOT NULL,
+                category TEXT NOT NULL,
+                subcategory TEXT,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         """)

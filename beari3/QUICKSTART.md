@@ -1,53 +1,72 @@
 # Beari3 Quick Start Guide
 
-## Installation (Option 1 - Automated)
+## Installation (Automated - Recommended)
 
 ```powershell
 cd beari3
 python setup.py
 ```
 
-This will automatically install all dependencies and download the spaCy model.
-
-## Installation (Option 2 - Manual)
-
-```powershell
-cd beari3
-pip install -r requirements.txt
-python -m spacy download en_core_web_sm
-```
+This installs spaCy, TextBlob, and downloads all required language models.
 
 ## Running Beari3
 
-### Start Training
+### 1. See Generalization Demo (Recommended First!)
+
+```powershell
+python demo_generalization.py
+```
+
+Watch how training on "curry" generalizes to "pizza", "taco", etc.!
+
+### 2. Start Training Mode
+
 ```powershell
 python train.py
 ```
 
-### View Database
+### 3. View Database
+
 ```powershell
 python view_db.py
 ```
 
-## Example Training Session
+### 4. Run Tests
+
+```powershell
+python tests/test_abstraction.py
+```
+
+## Example: The Power of Generalization
 
 ```
-Enter a prompt: I just ate a burger.
+📚 TRAIN ON ONE EXAMPLE:
+Prompt: "I just cooked a curry."
+Response: "Yum! Did it taste good?"
 
-[System analyzes: subject=I, verb=eat, target=burger]
+✓ System learns signature: SELF_PAST_ACTION_CREATION_FOOD
+✓ Creates template: "Yum! Did {target} taste good?"
 
-Enter the ideal response: Nice! How was the burger?
-
-[System learns: Pattern = Statement:Action → Affirmation + Question(Target)]
-
-✓ Conversational Unit saved!
+🧪 NOW IT WORKS ON ALL FOODS:
+"I cooked a taco." → "Yum! Did the taco taste good?"
+"I cooked a pizza." → "Yum! Did the pizza taste good?"
 ```
+
+## Key Features
+
+### 🏷️ Semantic Categories
+- curry, pizza, taco → FOOD
+- walk, run, jog → ACTIVITY
+
+### 🧠 Abstract Signatures
+- "I ate curry" → SELF_PAST_ACTION_CONSUMPTION_FOOD
+- "I ate pizza" → SELF_PAST_ACTION_CONSUMPTION_FOOD (same!)
 
 ## Tips
 
-1. **Define unknown words** when prompted - it improves pattern recognition
-2. **Be consistent** with your response styles
-3. **Use the viewer** to check what patterns have been learned
+1. **Add semantic categories** when prompted - enables generalization
+2. **Run the demo** to understand abstraction before training
+3. **Be consistent** with response styles
 4. **Start simple** - basic statements work best initially
 
 ## Files

@@ -10,24 +10,28 @@ Main training loop implementing the 4-phase cycle:
 import sys
 from db.schema import Database
 from utils.vocab_manager import VocabularyManager
+from utils.semantic_manager import SemanticCategoryManager
 from core.analyzer import SentenceAnalyzer
 from core.inference import InferenceEngine
+from core.generator import ResponseGenerator
 
 
 class Beari3Trainer:
     def __init__(self, db_path="beari3.db"):
         print("\n" + "=" * 50)
         print("   BEARI3 - Supervised Learning Model")
-        print("   Watch and Learn System")
+        print("   Watch and Learn System with Abstraction")
         print("=" * 50)
         
         # Initialize components
         self.db = Database(db_path)
         self.vocab_manager = VocabularyManager(self.db)
-        self.analyzer = SentenceAnalyzer(self.vocab_manager)
+        self.semantic_manager = SemanticCategoryManager(self.db)
+        self.analyzer = SentenceAnalyzer(self.vocab_manager, self.semantic_manager)
         self.inference_engine = InferenceEngine(self.db)
+        self.generator = ResponseGenerator(self.db, self.analyzer)
         
-        print("\n✓ System initialized")
+        print("\n✓ System initialized with semantic abstraction")
     
     def seed_vocabulary(self):
         """Seed common words to reduce initial friction"""
@@ -58,7 +62,7 @@ class Beari3Trainer:
         # Analyze the prompt
         analysis = self.analyzer.analyze(prompt)
         
-        # Handle unknown words
+        # Handle unknown words and missing semantic categories
         if analysis['unknowns']:
             print(f"\n⚠️  Found {len(analysis['unknowns'])} unknown word(s)")
             choice = input("Would you like to define them now? (y/n): ").strip().lower()
@@ -69,6 +73,27 @@ class Beari3Trainer:
                 print("\n✓ Vocabulary updated")
             else:
                 print("⚠️  Skipping vocabulary update (may affect pattern learning)")
+        
+        # Check if semantic categories are missing
+        missing_categories = []
+        if analysis['target'] and 'target_category' not in analysis.get('semantic_tags', {}):
+            missing_categories.append(analysis['target'])
+        if analysis['verb'] and 'verb_category' not in analysis.get('semantic_tags', {}):
+            missing_categories.append(analysis['verb'])
+        
+        if missing_categories:
+            print(f"\n🏷️  Some words lack semantic categories: {missing_categories}")
+            choice = input("Add semantic categories for better generalization? (y/n): ").strip().lower()
+            
+            if choice == 'y':
+                for word in missing_categories:
+                    self.semantic_manager.add_category_interactive(word)
+                print("\n✓ Semantic categories updated")
+                # Re-analyze to get updated signature
+                print("\n🔄 Re-analyzing with new semantic categories...")
+                analysis = self.analyzer.analyze(prompt)
+            else:
+                print("⚠️  Skipping semantic categorization (limits generalization)")
         
         # PHASE B: Gold Standard Response
         print("\n📝 PHASE B: Gold Standard Response")
@@ -88,7 +113,11 @@ class Beari3Trainer:
         # PHASE D: Storage
         print("\n💾 PHASE D: Storage")
         print("-" * 50)
-        self.inference_engine.save_conversational_unit(analysis, response, inference_result)
+        
+        # Create response template
+        response_template = self.generator.create_template_from_response(response, analysis)
+        
+        self.inference_engine.save_conversational_unit(analysis, response, inference_result, response_template)
         
         print("\n✓ Training cycle complete!")
         return True

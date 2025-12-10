@@ -88,7 +88,7 @@ class InferenceEngine:
         
         print("=" * 30 + "\n")
     
-    def save_conversational_unit(self, prompt_analysis, response_text, inference_result):
+    def save_conversational_unit(self, prompt_analysis, response_text, inference_result, response_template=None):
         """Save the complete training interaction to the database"""
         conn = self.db.get_connection()
         cursor = conn.cursor()
@@ -114,14 +114,19 @@ class InferenceEngine:
         
         cursor.execute("""
             INSERT INTO ConversationalUnits 
-            (prompt_raw, prompt_structure, response_raw, response_strategy, key_words)
-            VALUES (?, ?, ?, ?, ?)
+            (prompt_raw, prompt_structure, response_raw, response_strategy, key_words,
+             pattern_signature, response_template, tense, sentiment_score)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
         """, (
             prompt_analysis['original'],
             prompt_structure,
             response_text,
             inference_result['response_strategy'],
-            ", ".join(key_words)
+            ", ".join(key_words),
+            prompt_analysis.get('signature'),
+            response_template,
+            prompt_analysis.get('tense'),
+            prompt_analysis.get('sentiment')
         ))
         
         conn.commit()
@@ -129,6 +134,9 @@ class InferenceEngine:
         conn.close()
         
         print(f"✓ Saved Conversational Unit #{c_unit_id}")
+        print(f"  Signature: {prompt_analysis.get('signature')}")
+        if response_template:
+            print(f"  Template: {response_template}")
         
         # Save pattern if one was learned
         if inference_result['pattern']:

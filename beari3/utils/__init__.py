@@ -1,1 +1,2 @@
 from .vocab_manager import VocabularyManager
+from .semantic_manager import SemanticCategoryManager
