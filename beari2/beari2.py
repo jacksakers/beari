@@ -267,7 +267,9 @@ class Beari2:
         sentence_type = parsed.get('sentence_type', 'statement')
         
         self.debug.log(f"Sentence type: {sentence_type}", "PROCESSING")
-        self.debug.log_parse(f"Parsed data: {parsed}")
+        # print the parsed data in a structured way by logging each key-value pair
+        for key, value in parsed.items():
+            self.debug.log(f"{key}: {value}", "PARSED SENTENCE DATA")
         
         # Handle greeting if present
         greeting_response = ""
@@ -432,7 +434,7 @@ class Beari2:
         if sentence_type == 'question' and answer_result:
             # Add the answer
             answer_text = answer_result.get('answer', "I don't know about that yet.")
-            message_parts.append(self.convert_pronouns(answer_text))
+            message_parts.append(answer_text)
         elif confirmation:
             # Add confirmation for statements
             message_parts.append(confirmation)
@@ -441,7 +443,6 @@ class Beari2:
         if gap_field and gap_object:
             question = generate_question(gap_object.word, gap_field, gap_object.pos)
             # Apply pronoun conversion to the question
-            question = self.convert_pronouns(question)
             message_parts.append(question)
             
             # Set waiting state

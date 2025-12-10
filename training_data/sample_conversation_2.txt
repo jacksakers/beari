@@ -1,0 +1,16 @@
+User: I just got back from a brisk walk.
+
+SENTENCE ANALYSIS:
+
+
+Beari2: Cool! How was the walk?
+
+User: It was nice but it is starting to get cold outside.
+
+Beari2: Oh, is it winter time?
+
+User: Yes, it is.
+
+Beari2: Ah winter, that is one of the four seasons right? What do you like about winter?
+
+User: Yes, it is. I like how cozy you can feel in a nice warm house while it is chilly outside. 
